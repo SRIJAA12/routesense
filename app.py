@@ -1133,8 +1133,8 @@ def render_admin():
     # so folium maps and charts are never built for hidden tabs (fast switching).
     _tab = st.radio(
         "",
-        options=["📍 Operations", "🧠 AI Insights", "🚛 Fleet",
-                 "⚖️ Compare", "📊 Analytics", "🔔 Alerts", "📤 Upload Data", "📖 Help"],
+        options=["� Help", "📤 Upload Data", "📍 Operations", "🧠 AI Insights",
+                 "🚛 Fleet", "⚖️ Compare", "📊 Analytics", "🔔 Alerts"],
         key="admin_tab",
         horizontal=True,
         label_visibility="collapsed",
