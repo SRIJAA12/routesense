@@ -199,7 +199,11 @@ button[kind="headerNoPadding"] {
     border: none !important;
 }
 [data-testid="stSidebarCollapseButton"] svg,
-[data-testid="collapsedControl"] svg { fill: #cbd5e1 !important; stroke: #cbd5e1 !important; } = """
+[data-testid="collapsedControl"] svg { fill: #cbd5e1 !important; stroke: #cbd5e1 !important; }
+</style>
+"""
+
+LIGHT_CSS = """
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
 
@@ -307,6 +311,9 @@ button[kind="headerNoPadding"] {
 }
 [data-testid="stSidebarCollapseButton"] svg,
 [data-testid="collapsedControl"] svg { fill: #1e3a8a !important; stroke: #1e3a8a !important; }
+</style>
+"""
+
 
 def _render_anti_dim_js() -> None:
     """
