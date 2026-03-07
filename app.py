@@ -184,10 +184,22 @@ div[role="radiogroup"]:has(label:nth-child(8)) label p {
 #stDecoration { display: none !important; }
 /* Hide the deploy / kebab toolbar that briefly appears on rerun */
 [data-testid="stToolbar"] { display: none !important; }
-</style>
-"""
 
-LIGHT_CSS = """
+/* ── header bar (the white strip at the very top) ── */
+[data-testid="stHeader"] {
+    background: #050b14 !important;
+    border-bottom: 1px solid rgba(255,255,255,0.07) !important;
+}
+/* sidebar collapse / expand toggle button */
+[data-testid="stSidebarCollapseButton"] button,
+[data-testid="collapsedControl"] button,
+button[kind="headerNoPadding"] {
+    color: #cbd5e1 !important;
+    background: transparent !important;
+    border: none !important;
+}
+[data-testid="stSidebarCollapseButton"] svg,
+[data-testid="collapsedControl"] svg { fill: #cbd5e1 !important; stroke: #cbd5e1 !important; } = """
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
 
@@ -277,8 +289,24 @@ div[role="radiogroup"]:has(label:nth-child(8)) label p {
 [data-testid="stStatusWidget"] { display: none !important; }
 #stDecoration { display: none !important; }
 [data-testid="stToolbar"] { display: none !important; }
-</style>
-"""
+
+/* ── header bar — make transparent to show gradient behind it ── */
+[data-testid="stHeader"] {
+    background: transparent !important;
+    backdrop-filter: none !important;
+    box-shadow: none !important;
+    border-bottom: none !important;
+}
+/* sidebar collapse / expand toggle button */
+[data-testid="stSidebarCollapseButton"] button,
+[data-testid="collapsedControl"] button,
+button[kind="headerNoPadding"] {
+    color: #1e3a8a !important;
+    background: transparent !important;
+    border: none !important;
+}
+[data-testid="stSidebarCollapseButton"] svg,
+[data-testid="collapsedControl"] svg { fill: #1e3a8a !important; stroke: #1e3a8a !important; }
 
 def _render_anti_dim_js() -> None:
     """
