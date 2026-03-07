@@ -69,10 +69,72 @@ html, body, .stApp { font-family: 'Inter', sans-serif !important; }
 
 /* dataframes */
 [data-testid="stDataFrame"] * { color: #e2e8f0 !important; }
+[data-testid="stDataFrame"] { background: rgba(255,255,255,0.04) !important; }
 
 /* text */
-p, span, label, li, td, th, caption, .stMarkdown, div { color: #cbd5e1 !important; }
+html, body { color: #e2e8f0 !important; background: #050b14 !important; }
+p, span, label, li, td, th, caption, .stMarkdown { color: #cbd5e1 !important; }
 h1,h2,h3,h4 { color: #f8fafc !important; }
+
+/* force every generic div inside the main area to inherit dark text */
+section[data-testid="stMain"] div,
+div[data-testid="stMainBlockContainer"] div { color: #cbd5e1 !important; }
+
+/* form inputs — must override since base="light" gives them light native styling */
+input, textarea,
+[data-baseweb="input"] > div,
+[data-baseweb="textarea"] > div,
+[data-testid="stTextInput"] > div,
+[data-testid="stNumberInput"] > div {
+    background: rgba(255,255,255,0.08) !important;
+    color: #e2e8f0 !important;
+    border: 1px solid rgba(255,255,255,0.18) !important;
+    border-radius: 8px !important;
+}
+input::placeholder, textarea::placeholder { color: #64748b !important; }
+
+/* select / dropdown */
+[data-baseweb="select"] > div {
+    background: rgba(255,255,255,0.08) !important;
+    color: #e2e8f0 !important;
+    border: 1px solid rgba(255,255,255,0.18) !important;
+    border-radius: 8px !important;
+}
+[data-baseweb="popover"] { background: #1e293b !important; }
+[data-baseweb="menu"] { background: #1e293b !important; }
+[data-baseweb="menu"] li, [data-baseweb="menu"] li * { color: #e2e8f0 !important; background: transparent !important; }
+[data-baseweb="menu"] [aria-selected="true"] { background: rgba(96,165,250,0.15) !important; }
+
+/* radio & checkbox labels */
+[data-testid="stRadio"] label p, [data-testid="stCheckbox"] label p { color: #cbd5e1 !important; }
+
+/* file uploader */
+[data-testid="stFileUploader"] section,
+[data-testid="stFileUploaderDropzone"] {
+    background: rgba(255,255,255,0.06) !important;
+    border: 2px dashed rgba(96,165,250,0.4) !important;
+    border-radius: 12px !important;
+}
+[data-testid="stFileUploader"] button,
+[data-testid="stFileUploaderDropzone"] button {
+    background: rgba(37,99,235,0.25) !important;
+    color: #93c5fd !important;
+    border: 1px solid rgba(96,165,250,0.3) !important;
+    border-radius: 8px !important;
+}
+[data-testid="stFileUploader"] button *,
+[data-testid="stFileUploaderDropzone"] button * { color: #93c5fd !important; }
+
+/* download button */
+[data-testid="stDownloadButton"] button { background: rgba(37,99,235,0.25) !important; color: #93c5fd !important; border: 1px solid rgba(96,165,250,0.3) !important; }
+[data-testid="stDownloadButton"] button * { color: #93c5fd !important; }
+
+/* expander */
+[data-testid="stExpander"] { background: rgba(255,255,255,0.04) !important; border: 1px solid rgba(255,255,255,0.10) !important; border-radius: 10px; }
+[data-testid="stExpander"] summary * { color: #e2e8f0 !important; }
+
+/* code */
+code, pre { background: rgba(255,255,255,0.06) !important; color: #e2e8f0 !important; }
 
 /* info / warning */
 [data-testid="stAlert"] { border-radius: 10px; }
@@ -129,27 +191,20 @@ LIGHT_CSS = """
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
 
+/* base=light in config.toml means Streamlit handles native widget colors.
+   This CSS only adds visual enhancements on top. */
 html, body, .stApp { font-family: 'Inter', sans-serif !important; }
 
-/* ── forced light base (multiple selectors to beat any lingering dark CSS) ── */
-html, body, #root { background: #f0f7ff !important; }
-.stApp, div[data-testid="stApp"], div.stApp {
+/* custom gradient background */
+.stApp {
     background: linear-gradient(160deg,#f0f7ff 0%,#e8f0fe 50%,#f5f3ff 100%) !important;
-    color: #0f172a !important;
 }
+.main .block-container,
 section[data-testid="stMain"],
-div[data-testid="stMainBlockContainer"],
-.main, .main .block-container {
-    background: transparent !important;
-    color: #0f172a !important;
-}
+div[data-testid="stMainBlockContainer"] { background: transparent !important; }
 
-/* ── text (targeted — no bare 'div' rule) ── */
-p, span, label, li, td, th, caption { color: #0f172a !important; }
-.stMarkdown p, .stMarkdown span, .stMarkdown li { color: #0f172a !important; }
+/* headings */
 h1,h2,h3,h4,h5,h6 { color: #1e3a8a !important; }
-small, .caption { color: #475569 !important; }
-[data-testid="stCaptionContainer"] p { color: #475569 !important; }
 
 /* ── metric cards ── */
 [data-testid="stMetric"] {
@@ -158,27 +213,17 @@ small, .caption { color: #475569 !important; }
     border-radius: 14px !important;
     padding: 16px 20px !important;
     box-shadow: 0 2px 10px rgba(59,130,246,0.08) !important;
+    transition: transform 0.2s;
 }
-[data-testid="stMetric"]:hover { transform: translateY(-2px); box-shadow: 0 4px 16px rgba(59,130,246,0.14) !important; }
+[data-testid="stMetric"]:hover { transform: translateY(-2px); }
 [data-testid="stMetricValue"] { font-size: 1.5rem !important; font-weight: 700 !important; color: #1d4ed8 !important; }
 [data-testid="stMetricLabel"] { color: #64748b !important; font-size: 0.75rem !important; text-transform: uppercase; letter-spacing: 0.08em; }
 
 /* ── sidebar ── */
 [data-testid="stSidebar"], [data-testid="stSidebar"] > div { background: #ffffff !important; border-right: 1px solid #bfdbfe !important; }
-[data-testid="stSidebar"] p,
-[data-testid="stSidebar"] span,
-[data-testid="stSidebar"] label,
-[data-testid="stSidebar"] li { color: #1e293b !important; }
-[data-testid="stSidebar"] h1,
-[data-testid="stSidebar"] h2,
-[data-testid="stSidebar"] h3,
-[data-testid="stSidebar"] h4 { color: #1e3a8a !important; }
-[data-testid="stSidebar"] .stMarkdown p,
-[data-testid="stSidebar"] .stMarkdown span { color: #1e293b !important; }
 
 /* ── buttons ── */
-.stButton > button,
-div[data-testid="stButton"] > button {
+.stButton > button {
     background: linear-gradient(135deg,#1d4ed8,#2563eb) !important;
     color: #ffffff !important;
     border: none !important; border-radius: 10px !important;
@@ -187,74 +232,12 @@ div[data-testid="stButton"] > button {
     box-shadow: 0 2px 10px rgba(29,78,216,0.25) !important;
     transition: all 0.2s;
 }
-/* ensure ALL children of the button show white text */
-.stButton > button *,
-div[data-testid="stButton"] > button * { color: #ffffff !important; background: transparent !important; }
+.stButton > button *, div[data-testid="stButton"] > button * { color: #ffffff !important; background: transparent !important; }
 .stButton > button:hover { background: linear-gradient(135deg,#1e40af,#1d4ed8) !important; transform: translateY(-1px); }
-
-/* ── tabs (standard st.tabs) ── */
-.stTabs [data-baseweb="tab-list"] { background: transparent !important; border-bottom: 1px solid #bfdbfe !important; }
-.stTabs [data-baseweb="tab"] { color: #64748b !important; font-weight: 600 !important; font-size: 0.85rem !important; border-radius: 8px 8px 0 0 !important; padding: 8px 18px !important; background: transparent !important; }
-.stTabs [data-baseweb="tab"][aria-selected="true"] { color: #1d4ed8 !important; background: #eff6ff !important; border-bottom: 2px solid #1d4ed8 !important; }
-.stTabs [data-baseweb="tab"] * { color: inherit !important; }
-
-/* ── inputs & text boxes ── */
-input, textarea, select {
-    background: #ffffff !important; color: #0f172a !important;
-    border: 1px solid #cbd5e1 !important; border-radius: 8px !important;
-}
-input::placeholder, textarea::placeholder { color: #94a3b8 !important; }
-[data-baseweb="input"], [data-baseweb="input"] > div { background: #ffffff !important; }
-[data-baseweb="input"] input { background: transparent !important; color: #0f172a !important; }
-[data-testid="stTextInput"] > div,
-[data-testid="stNumberInput"] > div { background: #ffffff !important; border: 1px solid #cbd5e1 !important; border-radius: 8px !important; }
-
-/* ── select / dropdown ── */
-[data-baseweb="select"] > div { background: #ffffff !important; color: #0f172a !important; border: 1px solid #cbd5e1 !important; border-radius: 8px !important; }
-[data-baseweb="popover"] { background: #ffffff !important; }
-[data-baseweb="menu"] { background: #ffffff !important; }
-[data-baseweb="menu"] li, [data-baseweb="menu"] li * { color: #0f172a !important; background: transparent !important; }
-[data-baseweb="menu"] [aria-selected="true"], [data-baseweb="menu"] [aria-selected="true"] * { background: #eff6ff !important; color: #1d4ed8 !important; }
-
-/* ── radio & checkbox ── */
-[data-testid="stRadio"] label p, [data-testid="stCheckbox"] label p { color: #0f172a !important; }
-[data-testid="stRadio"] span, [data-testid="stCheckbox"] span { color: #0f172a !important; }
-
-/* ── file uploader ── */
-[data-testid="stFileUploader"],
-[data-testid="stFileUploader"] > div,
-[data-testid="stFileUploader"] section,
-section[data-testid="stFileUploaderDropzone"],
-[data-testid="stFileUploaderDropzone"] {
-    background: #f8fafc !important;
-    border: 2px dashed #93c5fd !important;
-    border-radius: 12px !important;
-}
-[data-testid="stFileUploader"] p,
-[data-testid="stFileUploader"] span,
-[data-testid="stFileUploaderDropzone"] p,
-[data-testid="stFileUploaderDropzone"] span { color: #0f172a !important; }
-[data-testid="stFileUploader"] small,
-[data-testid="stFileUploaderDropzone"] small { color: #475569 !important; }
-[data-testid="stFileUploader"] button,
-[data-testid="stFileUploaderDropzone"] button { color: #1d4ed8 !important; background: #eff6ff !important; border: 1px solid #bfdbfe !important; border-radius: 8px !important; }
-[data-testid="stFileUploader"] button *,
-[data-testid="stFileUploaderDropzone"] button * { color: #1d4ed8 !important; }
 
 /* ── download button ── */
 [data-testid="stDownloadButton"] button { background: #eff6ff !important; color: #1d4ed8 !important; border: 1px solid #bfdbfe !important; border-radius: 10px !important; }
 [data-testid="stDownloadButton"] button * { color: #1d4ed8 !important; }
-
-/* ── info / warning / error / success alerts ── */
-[data-testid="stAlert"] { border-radius: 10px !important; }
-[data-testid="stAlert"] * { color: inherit !important; }
-
-/* ── dataframes ── */
-[data-testid="stDataFrame"] { background: #ffffff !important; border: 1px solid #e2e8f0 !important; border-radius: 8px !important; }
-[data-testid="stDataFrame"] * { color: #0f172a !important; }
-
-/* ── folium / iframe map containers ── */
-[data-testid="stIFrame"], iframe { background: #ffffff !important; }
 
 /* ── progress bar ── */
 [data-testid="stProgressBar"] > div { background: #dbeafe !important; border-radius: 99px; }
@@ -262,13 +245,6 @@ section[data-testid="stFileUploaderDropzone"],
 
 /* ── divider ── */
 hr { border-color: #e2e8f0 !important; }
-
-/* ── expander ── */
-[data-testid="stExpander"] { background: #ffffff !important; border: 1px solid #e2e8f0 !important; border-radius: 10px !important; }
-[data-testid="stExpander"] summary * { color: #1e3a8a !important; }
-
-/* ── code blocks ── */
-code, pre { background: #f1f5f9 !important; color: #1e293b !important; border-radius: 6px; }
 
 /* ── admin nav radio styled as tab bar ── */
 div[role="radiogroup"]:has(label:nth-child(8)) {
@@ -278,7 +254,7 @@ div[role="radiogroup"]:has(label:nth-child(8)) {
 div[role="radiogroup"]:has(label:nth-child(8)) > label {
     padding: 6px 11px !important; border-radius: 8px 8px 0 0 !important;
     font-weight: 600 !important; font-size: 0.78rem !important;
-    color: #64748b !important; cursor: pointer !important; margin-bottom: -2px !important;
+    cursor: pointer !important; margin-bottom: -2px !important;
     white-space: nowrap !important; flex-shrink: 0 !important;
     display: inline-flex !important; align-items: center !important; gap: 4px !important;
 }
@@ -288,7 +264,7 @@ div[role="radiogroup"]:has(label:nth-child(8)) > label:has(input:checked) {
 }
 div[role="radiogroup"]:has(label:nth-child(8)) label > div:first-child { display: none !important; }
 div[role="radiogroup"]:has(label:nth-child(8)) label p {
-    color: inherit !important; white-space: nowrap !important; margin: 0 !important;
+    white-space: nowrap !important; margin: 0 !important;
 }
 
 /* ── Suppress Streamlit rerun dimming ── */
