@@ -213,7 +213,11 @@ button[kind="headerNoPadding"] {
     box-shadow: 0 4px 18px rgba(37,99,235,0.8) !important;
 }
 [data-testid="stSidebarCollapseButton"] svg,
-[data-testid="collapsedControl"] svg { fill: #ffffff !important; stroke: #ffffff !important; width: 20px !important; height: 20px !important; } = """
+[data-testid="collapsedControl"] svg { fill: #ffffff !important; stroke: #ffffff !important; width: 20px !important; height: 20px !important; }
+</style>
+"""
+
+LIGHT_CSS = """
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
 
