@@ -620,10 +620,13 @@ setTimeout(function() {{
 
 def speak_js(text: str, lang: str = "en-US", fallback_text: str = "") -> None:
     """
-    Browser TTS with automatic voice selection.
-    - Tries to find a voice matching `lang`.
-    - If no matching voice is found (common for hi-IN / ta-IN on Windows/Chrome
-      without Indian language packs), falls back to `fallback_text` spoken in en-US.
+    Browser TTS.  Strategy (in order):
+      1. Try to find a voice that matches `lang` exactly.
+      2. If none, try a voice whose name contains a known keyword for that language
+         (e.g. 'Hindi', 'Tamil', 'Google \u0939\u093f\u0902\u0926\u0940').
+      3. If still none, speak `text` with `lang` set but NO explicit voice —
+         modern Chrome/Edge will attempt the language anyway.
+      4. Only fall back to English if the browser reports zero voices at all.
     """
     encoded          = json.dumps(text)
     encoded_fallback = json.dumps(fallback_text if fallback_text else text)
@@ -634,40 +637,65 @@ def speak_js(text: str, lang: str = "en-US", fallback_text: str = "") -> None:
   var fallback = {encoded_fallback};
   var lang     = '{lang}';
 
-  function speak(speakText, speakLang, voice) {{
+  // Known voice name keywords per language prefix
+  var LANG_KEYWORDS = {{
+    'hi': ['hindi', 'heera', '\u0939\u093f\u0902\u0926\u0940', 'lekha', 'rishi'],
+    'ta': ['tamil', '\u0ba4\u0bae\u0bbf\u0bb4\u0bcd', 'lekha', 'veena'],
+  }};
+
+  function doSpeak(speakText, speakLang, voice) {{
     window.speechSynthesis.cancel();
     setTimeout(function() {{
-      var u = new SpeechSynthesisUtterance(speakText);
+      var u  = new SpeechSynthesisUtterance(speakText);
       u.lang  = speakLang;
-      u.rate  = 0.88;
-      u.pitch = 1.05;
+      u.rate  = 0.86;
+      u.pitch = 1.0;
       if (voice) u.voice = voice;
       window.speechSynthesis.speak(u);
-    }}, 180);
+    }}, 200);
   }}
 
   function pickVoice(voices, langTag) {{
-    // exact match first, then prefix match (e.g. 'ta' for 'ta-IN')
-    var exact  = voices.filter(function(v){{ return v.lang === langTag; }});
-    if (exact.length)  return exact[0];
-    var prefix = voices.filter(function(v){{ return v.lang.startsWith(langTag.split('-')[0]); }});
-    if (prefix.length) return prefix[0];
-    return null;
+    var prefix = langTag.split('-')[0].toLowerCase();
+    // 1. Exact lang match
+    var m = voices.filter(function(v){{ return v.lang === langTag; }});
+    if (m.length) return m[0];
+    // 2. Prefix match (e.g. 'hi' matches 'hi-IN')
+    m = voices.filter(function(v){{ return v.lang.toLowerCase().startsWith(prefix); }});
+    if (m.length) return m[0];
+    // 3. Keyword in voice name
+    var kws = LANG_KEYWORDS[prefix] || [];
+    m = voices.filter(function(v){{
+      var vl = v.name.toLowerCase();
+      return kws.some(function(k){{ return vl.indexOf(k) >= 0; }});
+    }});
+    if (m.length) return m[0];
+    return null;  // no match
+  }}
+
+  function trySpeak(voices) {{
+    if (voices.length === 0) {{
+      // Truly no voices — last resort: plain en-US fallback
+      doSpeak(fallback, 'en-US', null);
+      return;
+    }}
+    var v = pickVoice(voices, lang);
+    if (v) {{
+      doSpeak(txt, lang, v);
+    }} else {{
+      // No matching voice but voices exist — speak native text with lang set,
+      // no explicit voice.  Browser will attempt the language itself.
+      doSpeak(txt, lang, null);
+    }}
   }}
 
   var voices = window.speechSynthesis.getVoices();
   if (voices.length === 0) {{
-    // Voices not yet loaded — wait for the event
     window.speechSynthesis.addEventListener('voiceschanged', function() {{
-      voices = window.speechSynthesis.getVoices();
-      var v = pickVoice(voices, lang);
-      if (v) {{ speak(txt, lang, v); }}
-      else   {{ speak(fallback, 'en-US', pickVoice(voices, 'en-US')); }}
+      trySpeak(window.speechSynthesis.getVoices());
     }}, {{once: true}});
   }} else {{
-    var v = pickVoice(voices, lang);
-    if (v) {{ speak(txt, lang, v); }}
-    else   {{ speak(fallback, 'en-US', pickVoice(voices, 'en-US')); }}
+    trySpeak(voices);
   }}
 }})();
 </script>""", height=0)
@@ -1563,18 +1591,18 @@ PLACE_PHONETICS: dict[str, dict[str, str]] = {
 # browser has no hi-IN or ta-IN voice installed (common on Windows without
 # Indian language packs).  Same space-separated syllable style as en-US above.
 _ROMAN_FALLBACK: dict[str, str] = {
-    "Chennai Depot":  "Chen nai Depot",
-    "T Nagar":        "Tee Nagar",
-    "Velachery":      "Vella cherry",
-    "Tambaram":       "Tum ba rum",
-    "Anna Nagar":     "Anna Nagar",
-    "Adyar":          "Ud yar",
-    "Porur":          "Paw rur",
-    "Guindy":         "Gin dee",
-    "OMR":            "Old Maha bali puram Road",
-    "Perambur":       "Peh rum bur",
-    "Mylapore":       "My la pore",
-    "Sholinganallur": "Show linga na lur",
+    "Chennai Depot":  "Chen nai Deh poh",
+    "T Nagar":        "Tee Nah gar",
+    "Velachery":      "Veh lah cher ee",
+    "Tambaram":       "Tahm bah rum",
+    "Anna Nagar":     "Ah nah Nah gar",
+    "Adyar":          "Ahd yaar",
+    "Porur":          "Poh roor",
+    "Guindy":         "Ghin dee",
+    "OMR":            "Oh Em Ar",
+    "Perambur":       "Peh rum boor",
+    "Mylapore":       "My lah poor",
+    "Sholinganallur": "Show lin gah nah lur",
 }
 
 
@@ -1789,9 +1817,14 @@ def _check_scheduled_announcements(
 # ═══════════════════════════════════════════════════════════════════════════════
 
 def render_driver():
-    # ── Language selector at the very top ──────────────────────────────────────
+    # ── Language selector ──────────────────────────────────────────────────────
+    _lang_keys = list(LANG_OPTIONS.keys())
+    # Persist chosen language across auto-refresh reruns
+    _saved   = st.session_state.get("voice_lang_name", _lang_keys[0])
+    _def_idx = _lang_keys.index(_saved) if _saved in _lang_keys else 0
     lang_label = st.radio(
-        "Language", list(LANG_OPTIONS.keys()),
+        "Language", _lang_keys,
+        index=_def_idx,
         horizontal=True, key="voice_lang_name", label_visibility="collapsed",
     )
     lang_code, flag = LANG_OPTIONS[lang_label]
