@@ -82,6 +82,25 @@ h1,h2,h3,h4 { color: #f8fafc !important; }
 
 /* divider */
 hr { border-color: rgba(255,255,255,0.07) !important; }
+
+/* ── Suppress Streamlit rerun dimming ──────────────────────────────────────
+   Streamlit sets data-stale="true" on the app root during every rerun which
+   fades the whole page to ~30% opacity.  BetterStack / UptimeRobot health
+   pings wake the WebSocket and trigger reruns, making the site flash dim
+   every few seconds.  Force full opacity and kill the transition so the
+   dim effect is completely invisible to the user.                        */
+[data-stale="true"],
+[data-stale="true"] > * {
+    opacity: 1 !important;
+    transition: none !important;
+    filter: none !important;
+}
+/* Hide the spinning "Running…" status widget in the top-right corner */
+[data-testid="stStatusWidget"] { display: none !important; }
+/* Hide the top rainbow decoration bar */
+#stDecoration { display: none !important; }
+/* Hide the deploy / kebab toolbar that briefly appears on rerun */
+[data-testid="stToolbar"] { display: none !important; }
 </style>
 """
 
@@ -126,6 +145,17 @@ h1,h2,h3,h4 { color: #1e3a8a !important; }
 
 [data-testid="stProgressBar"] > div > div { background: linear-gradient(90deg,#3b82f6,#0ea5e9); }
 hr { border-color: #e2e8f0 !important; }
+
+/* ── Suppress Streamlit rerun dimming ── */
+[data-stale="true"],
+[data-stale="true"] > * {
+    opacity: 1 !important;
+    transition: none !important;
+    filter: none !important;
+}
+[data-testid="stStatusWidget"] { display: none !important; }
+#stDecoration { display: none !important; }
+[data-testid="stToolbar"] { display: none !important; }
 </style>
 """
 
