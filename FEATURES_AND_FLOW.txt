@@ -1,0 +1,225 @@
+================================================================================
+                    ROUTESENSE — FEATURES & WEBSITE FLOW
+================================================================================
+
+WHAT THE APP IS
+---------------
+RouteSense is a Streamlit-based logistics intelligence dashboard for
+multi-vehicle delivery route optimization, built around Chennai, India
+delivery locations.
+
+
+================================================================================
+WEBSITE FLOW
+================================================================================
+
+    App Loads
+        |
+        v
+    Reads data/deliveries.csv + data/fleet.csv
+        |
+        v
+    Sidebar: Choose Role --> Admin or Driver
+        |
+        |-----------------------------+
+        v                            v
+  Admin Dashboard             Driver Dashboard
+
+
+================================================================================
+SIDEBAR (ALWAYS VISIBLE)
+================================================================================
+
+Element                 | Function
+------------------------|--------------------------------------------------------
+☀️/🌙 Theme Toggle      | Switch between Dark (glassmorphism) and Light mode
+Role Switch             | Toggle between Admin and Driver views
+🔄 Refresh Data         | (Admin only) Reload CSVs from disk, reset routes
+🔔 Alert Badge          | Live count of active HIGH/WARN alerts
+Driver Progress         | (Driver only) Stops Done / Total + progress bar
+
+
+================================================================================
+ADMIN DASHBOARD — 8 TABS
+================================================================================
+
+--------------------------------------------------------------------------------
+TAB 1: 📖 Help
+--------------------------------------------------------------------------------
+- Step-by-step usage guide in 3 languages:
+    * English
+    * हिंदी (Hindi)
+    * தமிழ் (Tamil)
+
+--------------------------------------------------------------------------------
+TAB 2: 📍 Operations
+--------------------------------------------------------------------------------
+- Combined overview map — all drivers on one Folium map, each in a distinct color
+- Color-coded legend showing vehicle ID, driver name, stop count
+- Individual driver maps in a 2-column grid, each with:
+    * Driver info card (capacity, area, phone)
+    * Per-driver route polyline map
+    * Compact stop table (stop #, location, demand)
+- Optimization triggered via sidebar Refresh or Upload tab
+
+--------------------------------------------------------------------------------
+TAB 3: 🧠 AI Insights
+--------------------------------------------------------------------------------
+- AI Delay Prediction — Plotly gauge chart (0–100 risk score) based on:
+    * Time of day (peak hour detection: 8–10am, 5–8pm)
+    * Route distance factor
+    * Number of stops
+- Factor breakdown bar chart showing each contributor's impact
+- Route Risk Heatmap — Folium heatmap with red/orange/green corridors
+- Smart Fleet Recommendations — text recommendations such as:
+    * Consolidate loads
+    * Deploy additional vehicle
+    * Split long routes
+- Delivery ETA Predictions — table + Plotly line chart of minutes from dispatch per stop
+
+--------------------------------------------------------------------------------
+TAB 4: 🚛 Fleet
+--------------------------------------------------------------------------------
+- Vehicle status cards for each driver:
+    * Status: Idle / Standby / Dispatched / En Route
+    * Shows: vehicle ID, driver name, capacity, assigned stops, area, phone
+- Driver Route Assignments table — full stop sequence for every driver
+- Corridor Congestion Scoring — bar chart scoring every delivery location 0–100
+
+--------------------------------------------------------------------------------
+TAB 5: ⚖️ Compare
+--------------------------------------------------------------------------------
+- Side-by-side Folium maps:
+    * Unoptimised (sequential order)
+    * Optimised (VRP)
+- Comparison table covering:
+    * Distance (km)
+    * Fuel Use (L)
+    * CO₂ Emitted (kg)
+    * Estimated Travel Time (min)
+    * Savings column for each metric
+- Progress bar showing optimization efficiency %
+
+--------------------------------------------------------------------------------
+TAB 6: 📊 Analytics
+--------------------------------------------------------------------------------
+- Bar chart: Unoptimised vs Optimised distance
+- KPI metrics:
+    * Distance Saved
+    * Fuel Saved (@ 0.18 L/km)
+    * CO₂ Saved (@ 0.21 kg/km)
+    * Capacity Utilization %
+- Optimization efficiency progress bar
+- Demand Distribution chart (if demand column present) — bar chart per location
+
+--------------------------------------------------------------------------------
+TAB 7: 🔔 Alerts
+--------------------------------------------------------------------------------
+- Live operational alerts based on delay risk, time of day, route distance
+- Color-coded severity levels:
+    * 🔴 HIGH  → error box
+    * 🟡 WARN  → warning box
+    * 🟢 OK    → success box
+    * 🔵 INFO  → info box
+- Corridor Congestion Snapshot table — all delivery locations with congestion status
+
+--------------------------------------------------------------------------------
+TAB 8: 📤 Upload Data
+--------------------------------------------------------------------------------
+- Download CSV templates for deliveries and fleet
+- Upload your own CSVs with validation (checks required columns)
+- Preview uploaded data before applying
+- Apply & Optimise button — runs multi-vehicle VRP on uploaded data:
+    * If driver_id column present → pre-assigns stops to specific drivers
+    * Otherwise → auto-allocates via OR-Tools VRP
+- Shows current live data (deliveries + fleet) at the bottom
+
+
+================================================================================
+DRIVER DASHBOARD
+================================================================================
+
+- Language selector at top: English / हिंदी / தமிழ் (UI and voice switch together)
+- Combined overview map showing all drivers
+- Per-driver tabs — one tab per vehicle/driver, each showing:
+    * Driver info card (color-coded, area, phone)
+    * 4 KPI metrics: Next Stop, ETA, Stops Done, Delay Risk
+    * Route progress bar
+    * Side-by-side layout:
+        - Left:  Route map
+        - Right: Stop list table with ETA & status
+    * Stop statuses:
+        - ✅ Done
+        - 🚛 Now
+        - ⏳ Pending
+    * Scheduled time column (from est_delivery_time CSV column)
+
+--------------------------------------------------------------------------------
+🎙️ Voice Announcements — 5 Buttons Per Driver
+--------------------------------------------------------------------------------
+All spoken in the selected language (English / Hindi / Tamil):
+
+Button          | What it says
+----------------|--------------------------------------------------------------
+📍 Next Stop    | "Your next stop is [location]. ETA [time]."
+🕐 ETA          | "ETA for the next stop is [time]."
+🚦 Traffic      | High / Medium / Low delay risk message
+📊 Progress     | "X of Y stops completed, Z remaining."
+🗺️ Full Briefing | Combined: greeting + remaining stops + next stop + ETA
+                |           + risk level + total distance
+
+--------------------------------------------------------------------------------
+⏰ Automatic Scheduled Alerts (No Button Needed)
+--------------------------------------------------------------------------------
+- If est_delivery_time column exists in CSV, the app auto-announces via browser TTS:
+    * 2 minutes BEFORE delivery time  → "Time to head to [location]"
+    * 10+ minutes OVERDUE             → "Warning! Delivery time exceeded for [location]"
+- Page silently auto-refreshes every 45 seconds (or sooner if delivery is imminent)
+  to fire these alerts on time without any user interaction
+
+
+================================================================================
+CORE ENGINE (BACKEND)
+================================================================================
+
+Module                  | Role
+------------------------|--------------------------------------------------------
+OR-Tools VRP            | Single or multi-vehicle route optimization using
+                        | Path Cheapest Arc + Guided Local Search metaheuristic
+Haversine Distance      | Calculates real-world km between lat/lon coordinates
+Distance Matrix         | NxN matrix built from all delivery coordinate pairs
+Capacity Constraints    | VRP respects per-vehicle capacity and demand values
+ETA Computation         | Speed = 20 km/h (peak hours) or 30 km/h (off-peak)
+                        | + 5 minutes service time per stop
+Heatmap Generator       | Risk points generated around each delivery node with
+                        | demand-weighted intensity
+
+
+================================================================================
+DATA FILES
+================================================================================
+
+File                    | Required Columns
+------------------------|--------------------------------------------------------
+data/deliveries.csv     | id, location, lat, lon
+                        | Optional: demand, driver_id, est_delivery_time
+data/fleet.csv          | vehicle_id, capacity
+                        | Optional: driver_name, driver_phone, area
+
+
+================================================================================
+TECHNOLOGY STACK
+================================================================================
+
+- Framework:      Streamlit
+- Mapping:        Folium + streamlit-folium (CartoDB dark_matter tiles)
+- Charts:         Plotly Express + Plotly Graph Objects
+- Optimization:   Google OR-Tools (pywrapcp, routing_enums_pb2)
+- Data:           Pandas + NumPy
+- Voice:          Browser Web Speech API (SpeechSynthesisUtterance)
+- Styling:        Custom CSS — glassmorphism cards, gradient backgrounds, Inter font
+- Languages:      Python 3
+
+================================================================================
+END OF DOCUMENT
+================================================================================

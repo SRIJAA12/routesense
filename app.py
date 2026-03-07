@@ -734,9 +734,14 @@ def refresh_data():
     d,f=load_operational_data()
     st.session_state.deliveries=d; st.session_state.fleet=f
     st.session_state.route=None; st.session_state.route_distance=0.0
-    st.session_state.vehicle_index=1
+    st.session_state.vehicle_index=1; st.session_state.driver_routes={}
+    st.session_state.auto_announced=set()
     dm=create_distance_matrix(d); st.session_state.baseline_distance=sequential_route_distance(dm)
-    st.session_state.status_message="Data refreshed from CSV files"
+    # Clear uploaded file widgets so new files can be selected
+    for _k in ("del_uploader", "fleet_uploader"):
+        if _k in st.session_state:
+            del st.session_state[_k]
+    st.session_state.status_message="Data refreshed — previous uploads cleared. Upload new files in the Upload Data tab."
 
 
 def run_optimization():
