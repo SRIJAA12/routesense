@@ -190,20 +190,30 @@ div[role="radiogroup"]:has(label:nth-child(8)) label p {
     background: #050b14 !important;
     border-bottom: 1px solid rgba(255,255,255,0.07) !important;
 }
-/* sidebar collapse / expand toggle button */
+/* sidebar collapse / expand toggle button — dark theme */
+[data-testid="stSidebarCollapseButton"],
+[data-testid="collapsedControl"] {
+    position: relative !important;
+    z-index: 9999 !important;
+}
 [data-testid="stSidebarCollapseButton"] button,
 [data-testid="collapsedControl"] button,
 button[kind="headerNoPadding"] {
-    color: #cbd5e1 !important;
-    background: transparent !important;
-    border: none !important;
+    color: #f1f5f9 !important;
+    background: #2563eb !important;
+    border: 2px solid #60a5fa !important;
+    border-radius: 8px !important;
+    padding: 6px 10px !important;
+    box-shadow: 0 2px 12px rgba(37,99,235,0.6) !important;
+    opacity: 1 !important;
+}
+[data-testid="stSidebarCollapseButton"] button:hover,
+[data-testid="collapsedControl"] button:hover {
+    background: #1d4ed8 !important;
+    box-shadow: 0 4px 18px rgba(37,99,235,0.8) !important;
 }
 [data-testid="stSidebarCollapseButton"] svg,
-[data-testid="collapsedControl"] svg { fill: #cbd5e1 !important; stroke: #cbd5e1 !important; }
-</style>
-"""
-
-LIGHT_CSS = """
+[data-testid="collapsedControl"] svg { fill: #ffffff !important; stroke: #ffffff !important; width: 20px !important; height: 20px !important; } = """
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
 
@@ -294,6 +304,14 @@ div[role="radiogroup"]:has(label:nth-child(8)) label p {
 #stDecoration { display: none !important; }
 [data-testid="stToolbar"] { display: none !important; }
 
+/* ── plotly chart text — override white SVG text in light mode ── */
+.js-plotly-plot .plotly text,
+.js-plotly-plot .plotly .gtitle,
+.js-plotly-plot .plotly .xtick text,
+.js-plotly-plot .plotly .ytick text,
+.js-plotly-plot .plotly .legendtext,
+.js-plotly-plot .plotly .g-gtitle text { fill: #1e293b !important; }
+
 /* ── header bar — make transparent to show gradient behind it ── */
 [data-testid="stHeader"] {
     background: transparent !important;
@@ -301,16 +319,30 @@ div[role="radiogroup"]:has(label:nth-child(8)) label p {
     box-shadow: none !important;
     border-bottom: none !important;
 }
-/* sidebar collapse / expand toggle button */
+/* sidebar collapse / expand toggle button — light theme */
+[data-testid="stSidebarCollapseButton"],
+[data-testid="collapsedControl"] {
+    position: relative !important;
+    z-index: 9999 !important;
+}
 [data-testid="stSidebarCollapseButton"] button,
 [data-testid="collapsedControl"] button,
 button[kind="headerNoPadding"] {
-    color: #1e3a8a !important;
-    background: transparent !important;
-    border: none !important;
+    color: #ffffff !important;
+    background: #1d4ed8 !important;
+    border: 2px solid #3b82f6 !important;
+    border-radius: 8px !important;
+    padding: 6px 10px !important;
+    box-shadow: 0 2px 12px rgba(29,78,216,0.45) !important;
+    opacity: 1 !important;
+}
+[data-testid="stSidebarCollapseButton"] button:hover,
+[data-testid="collapsedControl"] button:hover {
+    background: #1e40af !important;
+    box-shadow: 0 4px 18px rgba(29,78,216,0.65) !important;
 }
 [data-testid="stSidebarCollapseButton"] svg,
-[data-testid="collapsedControl"] svg { fill: #1e3a8a !important; stroke: #1e3a8a !important; }
+[data-testid="collapsedControl"] svg { fill: #ffffff !important; stroke: #ffffff !important; width: 20px !important; height: 20px !important; }
 </style>
 """
 
@@ -1087,6 +1119,10 @@ with st.sidebar:
 
     if st.session_state.role=="Admin":
         st.markdown("#### Quick Actions")
+        if st.button("⚡  Optimise Routes", key="btn_optimise"):
+            try: run_optimization()
+            except Exception as ex: st.session_state.status_message=f"Optimisation failed: {ex}"
+            st.rerun()
         if st.button("🔄  Refresh Data", key="btn_refresh"):
             try: refresh_data()
             except Exception as ex: st.session_state.status_message=f"Refresh failed: {ex}"
