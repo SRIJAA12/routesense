@@ -83,6 +83,23 @@ h1,h2,h3,h4 { color: #f8fafc !important; }
 /* divider */
 hr { border-color: rgba(255,255,255,0.07) !important; }
 
+/* ── admin nav radio styled as tab bar ── */
+div[role="radiogroup"]:has(label:nth-child(8)) {
+    gap: 0 !important; flex-wrap: nowrap !important;
+    border-bottom: 1px solid rgba(255,255,255,0.08) !important; padding: 0 !important;
+}
+div[role="radiogroup"]:has(label:nth-child(8)) > label {
+    padding: 8px 13px !important; border-radius: 8px 8px 0 0 !important;
+    font-weight: 600 !important; font-size: 0.82rem !important;
+    color: #64748b !important; cursor: pointer !important; margin-bottom: -2px !important;
+}
+div[role="radiogroup"]:has(label:nth-child(8)) > label:has(input:checked) {
+    color: #60a5fa !important; background: rgba(96,165,250,0.08) !important;
+    border-bottom: 2px solid #3b82f6 !important;
+}
+div[role="radiogroup"]:has(label:nth-child(8)) label > div:first-child { display: none !important; }
+div[role="radiogroup"]:has(label:nth-child(8)) label p { color: inherit !important; }
+
 /* ── Suppress Streamlit rerun dimming ──────────────────────────────────────
    Streamlit sets data-stale="true" on the app root during every rerun which
    fades the whole page to ~30% opacity.  BetterStack / UptimeRobot health
@@ -188,21 +205,32 @@ input::placeholder, textarea::placeholder { color: #94a3b8 !important; }
 [data-testid="stRadio"] p, [data-testid="stCheckbox"] p { color: #0f172a !important; }
 
 /* ── file uploader ── */
-[data-testid="stFileUploadDropzone"],
-[data-testid="stFileUploader"] {
-    background: #ffffff !important;
+/* target every possible container Streamlit uses across versions */
+[data-testid="stFileUploader"],
+[data-testid="stFileUploader"] > div,
+[data-testid="stFileUploader"] section,
+section[data-testid="stFileUploaderDropzone"],
+[data-testid="stFileUploaderDropzone"] {
+    background: #f8fafc !important;
     border: 2px dashed #93c5fd !important;
     border-radius: 12px !important;
-    color: #0f172a !important;
 }
-[data-testid="stFileUploadDropzone"] *,
 [data-testid="stFileUploader"] *,
+[data-testid="stFileUploaderDropzone"] *,
 [data-testid="stFileUploaderFileName"],
-[data-testid="stFileUploaderFileData"] * { color: #0f172a !important; }
-[data-testid="stFileUploadDropzone"] small { color: #475569 !important; }
-/* "Browse files" button inside uploader */
-[data-testid="stFileUploadDropzone"] button,
-[data-testid="stFileUploadDropzone"] button span { color: #1d4ed8 !important; background: #eff6ff !important; }
+[data-testid="stFileUploaderFileData"] * { color: #0f172a !important; background: transparent !important; }
+[data-testid="stFileUploader"] small,
+[data-testid="stFileUploaderDropzone"] small { color: #475569 !important; }
+/* "Browse files" button */
+[data-testid="stFileUploader"] button,
+[data-testid="stFileUploaderDropzone"] button {
+    color: #1d4ed8 !important; background: #eff6ff !important;
+    border: 1px solid #bfdbfe !important; border-radius: 8px !important;
+}
+[data-testid="stFileUploader"] button span,
+[data-testid="stFileUploaderDropzone"] button span,
+[data-testid="stFileUploader"] button p,
+[data-testid="stFileUploaderDropzone"] button p { color: #1d4ed8 !important; }
 
 /* ── download button ── */
 [data-testid="stDownloadButton"] button {
@@ -235,6 +263,23 @@ hr { border-color: #e2e8f0 !important; }
 
 /* ── code blocks ── */
 code, pre { background: #f1f5f9 !important; color: #1e293b !important; border-radius: 6px; }
+
+/* ── admin nav radio styled as tab bar ── */
+div[role="radiogroup"]:has(label:nth-child(8)) {
+    gap: 0 !important; flex-wrap: nowrap !important;
+    border-bottom: 1px solid #bfdbfe !important; padding: 0 !important;
+}
+div[role="radiogroup"]:has(label:nth-child(8)) > label {
+    padding: 8px 13px !important; border-radius: 8px 8px 0 0 !important;
+    font-weight: 600 !important; font-size: 0.82rem !important;
+    color: #64748b !important; cursor: pointer !important; margin-bottom: -2px !important;
+}
+div[role="radiogroup"]:has(label:nth-child(8)) > label:has(input:checked) {
+    color: #1d4ed8 !important; background: #eff6ff !important;
+    border-bottom: 2px solid #1d4ed8 !important;
+}
+div[role="radiogroup"]:has(label:nth-child(8)) label > div:first-child { display: none !important; }
+div[role="radiogroup"]:has(label:nth-child(8)) label p { color: inherit !important; }
 
 /* ── Suppress Streamlit rerun dimming ── */
 [data-stale="true"],
@@ -1084,19 +1129,20 @@ def render_admin():
 
     st.markdown("<br>", unsafe_allow_html=True)
 
-    tab_help, tab_ops, tab_ai, tab_fleet, tab_compare, tab_analytics, tab_alerts, tab_upload = st.tabs([
-        "📖 Help",
-        "📍 Operations",
-        "🧠 AI Insights",
-        "🚛 Fleet",
-        "⚖️ Compare",
-        "📊 Analytics",
-        "🔔 Alerts",
-        "📤 Upload Data",
-    ])
+    # Session-state radio tab bar — only the selected tab's code block runs,
+    # so folium maps and charts are never built for hidden tabs (fast switching).
+    _tab = st.radio(
+        "",
+        options=["📍 Operations", "🧠 AI Insights", "🚛 Fleet",
+                 "⚖️ Compare", "📊 Analytics", "🔔 Alerts", "📤 Upload Data", "📖 Help"],
+        key="admin_tab",
+        horizontal=True,
+        label_visibility="collapsed",
+    )
+    st.markdown("<hr style='margin:2px 0 18px 0;'>", unsafe_allow_html=True)
 
     # ── Operations ────────────────────────────────────────────────────────────
-    with tab_ops:
+    if _tab == "📍 Operations":
         driver_routes_ss = st.session_state.get("driver_routes", {})
         # Fallback: wrap legacy single route so the rest of the code is uniform
         if not driver_routes_ss and route:
@@ -1195,7 +1241,7 @@ def render_admin():
                                          hide_index=True, height=180)
 
     # ── AI Insights ───────────────────────────────────────────────────────────
-    with tab_ai:
+    elif _tab == "🧠 AI Insights":
         left, right = st.columns([1,1])
 
         with left:
@@ -1284,7 +1330,7 @@ def render_admin():
                         st.plotly_chart(fig_eta, use_container_width=True, key="eta_chart")
 
     # ── Fleet ─────────────────────────────────────────────────────────────────
-    with tab_fleet:
+    elif _tab == "🚛 Fleet":
         st.markdown("#### 🚛 Fleet Monitoring")
         driver_routes_ss = st.session_state.get("driver_routes", {})
         statuses=[]
@@ -1369,7 +1415,7 @@ def render_admin():
             st.plotly_chart(fig_cong,use_container_width=True,key="cong_chart")
 
     # ── Compare ───────────────────────────────────────────────────────────────
-    with tab_compare:
+    elif _tab == "⚖️ Compare":
         st.markdown("#### ⚖️ Route Comparison")
         unopt_route = list(range(len(df)))+[0]
         opt_route = route
@@ -1414,7 +1460,7 @@ def render_admin():
                         text=f"Optimisation efficiency: {efficiency:.1f}% distance reduction")
 
     # ── Analytics ─────────────────────────────────────────────────────────────
-    with tab_analytics:
+    elif _tab == "📊 Analytics":
         st.markdown("#### 📊 Route Performance Analytics")
         before=baseline; after=opt_dist if route else before; sv=max(before-after,0.0)
         ch=pd.DataFrame({"Route":["Unoptimised","Optimised"],"Distance (km)":[before,after]})
@@ -1457,7 +1503,7 @@ def render_admin():
             st.plotly_chart(fig2,use_container_width=True,key="demand_chart")
 
     # ── Alerts ────────────────────────────────────────────────────────────────
-    with tab_alerts:
+    elif _tab == "🔔 Alerts":
         st.markdown("#### 🔔 Operational Alerts")
         alerts=generate_alerts(df, route, delay_level, opt_dist)
         for icon,level,msg in alerts:
@@ -1483,7 +1529,7 @@ def render_admin():
                      use_container_width=True, hide_index=True)
 
     # ── Upload Data ───────────────────────────────────────────────────────────
-    with tab_upload:
+    elif _tab == "📤 Upload Data":
         st.markdown("#### 📤 Upload Delivery & Driver Data")
         st.markdown(
             "Upload your own delivery stops and fleet roster. "
@@ -1619,7 +1665,7 @@ def render_admin():
             st.dataframe(fleet_df[_sfc], use_container_width=True, hide_index=True, height=300)
 
     # ── Help ──────────────────────────────────────────────────────────────────
-    with tab_help:
+    elif _tab == "📖 Help":
         help_lang = st.radio("Help language", ["English", "हिंदी", "தமிழ்"],
                              horizontal=True, key="help_lang_radio")
         st.markdown("<br>", unsafe_allow_html=True)
