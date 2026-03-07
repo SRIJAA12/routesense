@@ -253,6 +253,43 @@ def allocate_by_driver_col(df: "pd.DataFrame", fleet_df: "pd.DataFrame") -> dict
     return routes
 
 
+# ═══════════════════════════════════════════════════════════════════════════════
+# GLOBAL ROUTE CACHE  (survives WebSocket reconnects / session loss)
+# Uses st.cache_resource so the object is shared across ALL sessions on the
+# same server process — routes computed in one session are instantly available
+# to a reconnected session.
+# ═══════════════════════════════════════════════════════════════════════════════
+
+@st.cache_resource
+def _global_route_store() -> dict:
+    """Returns a single mutable dict shared across all sessions."""
+    return {}
+
+
+def _save_routes_to_cache():
+    """Persist the current session's route state into the global store."""
+    store = _global_route_store()
+    store["deliveries"]        = st.session_state.get("deliveries")
+    store["fleet"]             = st.session_state.get("fleet")
+    store["route"]             = st.session_state.get("route")
+    store["driver_routes"]     = st.session_state.get("driver_routes")
+    store["route_distance"]    = st.session_state.get("route_distance")
+    store["baseline_distance"] = st.session_state.get("baseline_distance")
+    store["n_vehicles"]        = st.session_state.get("n_vehicles")
+
+
+def _restore_routes_from_cache():
+    """Copy cached route data back into a fresh session's state."""
+    store = _global_route_store()
+    if store.get("route") or store.get("driver_routes"):
+        for key in ("deliveries","fleet","route","driver_routes",
+                    "route_distance","baseline_distance","n_vehicles"):
+            if store.get(key) is not None:
+                st.session_state[key] = store[key]
+        return True
+    return False
+
+
 # ── CSV Templates ──────────────────────────────────────────────────────────────
 DELIVERIES_TEMPLATE_CSV = (
     "id,location,lat,lon,demand,driver_id,est_delivery_time\n"
@@ -709,8 +746,10 @@ def initialize_state():
     if "dark_mode" not in st.session_state: st.session_state.dark_mode=True
     if "role" not in st.session_state: st.session_state.role="Admin"
     if "deliveries" not in st.session_state:
-        d,f=load_operational_data()
-        st.session_state.deliveries=d; st.session_state.fleet=f
+        # Try to restore last known routes from the global cache first
+        if not _restore_routes_from_cache():
+            d,f=load_operational_data()
+            st.session_state.deliveries=d; st.session_state.fleet=f
     if "route" not in st.session_state: st.session_state.route=None
     if "vehicle_index" not in st.session_state: st.session_state.vehicle_index=1
     if "route_distance" not in st.session_state: st.session_state.route_distance=0.0
@@ -718,7 +757,11 @@ def initialize_state():
         dm=create_distance_matrix(st.session_state.deliveries)
         st.session_state.baseline_distance=sequential_route_distance(dm)
     if "status_message" not in st.session_state:
-        st.session_state.status_message="Operational data loaded successfully"
+        store = _global_route_store()
+        if store.get("route") or store.get("driver_routes"):
+            st.session_state.status_message="Session restored — previous routes reloaded"
+        else:
+            st.session_state.status_message="Operational data loaded successfully"
     if "driver_speak" not in st.session_state: st.session_state.driver_speak=False
     if "voice_lang" not in st.session_state: st.session_state.voice_lang="en-US"
     if "last_announcement" not in st.session_state: st.session_state.last_announcement=""
@@ -741,6 +784,8 @@ def refresh_data():
     for _k in ("del_uploader", "fleet_uploader"):
         if _k in st.session_state:
             del st.session_state[_k]
+    # Clear the global cache so a reconnected session starts fresh too
+    _global_route_store().clear()
     st.session_state.status_message="Data refreshed — previous uploads cleared. Upload new files in the Upload Data tab."
 
 
@@ -765,6 +810,7 @@ def run_optimization():
     st.session_state.n_vehicles   = n_v
     st.session_state.vehicle_index = 1 if st.session_state.route and len(st.session_state.route) > 1 else 0
     st.session_state.status_message = f"Routes optimised for {n_v} driver(s) successfully"
+    _save_routes_to_cache()
 
 
 # ═══════════════════════════════════════════════════════════════════════════════
@@ -1394,6 +1440,7 @@ def render_admin():
                 st.session_state.n_vehicles     = _n_v
                 st.session_state.vehicle_index  = 1
                 st.session_state.status_message = f"Uploaded data applied — {_n_v} driver route(s) optimised."
+                _save_routes_to_cache()
                 st.rerun()
 
         st.divider()
@@ -1860,13 +1907,18 @@ def render_driver():
         st.session_state.do_speak = True
 
     # ── Auto-refresh timer ────────────────────────────────────────────────
-    # Calculate seconds until the nearest un-announced scheduled delivery
-    if "est_delivery_time" in df.columns:
+    # Only activate the auto-refresh ticker when the data actually has
+    # scheduled delivery times AND there are still un-announced stops coming up.
+    # This avoids pointless st.rerun() calls every 45 s (which cause maps to
+    # flash blank and the page to briefly show the unstyled "dull" state).
+    _has_sched = "est_delivery_time" in df.columns
+    if _has_sched:
         _now_secs   = (datetime.datetime.now().hour * 3600
                        + datetime.datetime.now().minute * 60
                        + datetime.datetime.now().second)
-        _refresh    = 45  # default: re-check every 45 s
         _announced  = st.session_state.get("auto_announced", set())
+        # Collect upcoming un-announced stops
+        _pending_secs = []
         for _vi, _vr in driver_routes_ss.items():
             for _nd in _vr:
                 if _nd == 0 or (_vi, _nd) in _announced:
@@ -1877,13 +1929,16 @@ def render_driver():
                 try:
                     _hh, _mm = _sc.split(":")
                     _diff = int(_hh)*3600 + int(_mm)*60 - _now_secs
-                    if 5 < _diff < _refresh:
-                        _refresh = _diff
+                    if _diff > -60:   # include slightly overdue stops too
+                        _pending_secs.append(_diff)
                 except Exception:
                     pass
-        render_autorefresh(max(10, _refresh))
-    else:
-        render_autorefresh(45)
+        if _pending_secs:
+            # Refresh just before the nearest upcoming stop (min 10 s, max 60 s)
+            _next_in = min(_pending_secs)
+            _refresh = max(10, min(int(_next_in) - 5 if _next_in > 15 else 10, 60))
+            render_autorefresh(_refresh)
+        # else: all stops announced — no more auto-refresh needed
 
     if not driver_routes_ss:
         st.warning(ui["no_route"])
