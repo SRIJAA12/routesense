@@ -110,11 +110,23 @@ LIGHT_CSS = """
 
 html, body, .stApp { font-family: 'Inter', sans-serif !important; }
 
-.stApp { background: linear-gradient(160deg,#f0f7ff 0%,#e8f0fe 50%,#f5f3ff 100%); color: #0f172a !important; }
+/* page background */
+.stApp { background: linear-gradient(160deg,#f0f7ff 0%,#e8f0fe 50%,#f5f3ff 100%) !important; color: #0f172a !important; }
 
+/* main content wrapper */
+.main .block-container { background: transparent !important; }
+section[data-testid="stMain"] { background: transparent !important; }
+
+/* ── text ── */
+p, span, label, li, td, th, caption, .stMarkdown, div { color: #0f172a !important; }
+h1,h2,h3,h4,h5,h6 { color: #1e3a8a !important; }
+small, .caption { color: #475569 !important; }
+[data-testid="stCaptionContainer"] p { color: #475569 !important; }
+
+/* ── metric cards ── */
 [data-testid="stMetric"] {
-    background: #ffffff;
-    border: 1px solid #dbeafe;
+    background: #ffffff !important;
+    border: 1px solid #dbeafe !important;
     border-radius: 14px;
     padding: 16px 20px;
     box-shadow: 0 2px 10px rgba(59,130,246,0.08);
@@ -124,27 +136,105 @@ html, body, .stApp { font-family: 'Inter', sans-serif !important; }
 [data-testid="stMetricValue"] { font-size: 1.5rem !important; font-weight: 700 !important; color: #1d4ed8 !important; }
 [data-testid="stMetricLabel"] { color: #64748b !important; font-size: 0.75rem !important; text-transform: uppercase; letter-spacing: 0.08em; }
 
-[data-testid="stSidebar"] { background: #ffffff; border-right: 1px solid #bfdbfe; }
+/* ── sidebar ── */
+[data-testid="stSidebar"] { background: #ffffff !important; border-right: 1px solid #bfdbfe; }
 [data-testid="stSidebar"] * { color: #1e293b !important; }
 
+/* ── buttons ── */
 .stButton > button {
-    background: linear-gradient(135deg,#1d4ed8,#2563eb);
-    color: #fff !important; border: none; border-radius: 10px;
+    background: linear-gradient(135deg,#1d4ed8,#2563eb) !important;
+    color: #fff !important; border: none !important; border-radius: 10px;
     font-weight: 600; font-size: 0.85rem; width: 100%; padding: 0.55rem 1rem;
     box-shadow: 0 2px 10px rgba(29,78,216,0.25);
     transition: all 0.2s;
 }
-.stButton > button:hover { background: linear-gradient(135deg,#1e40af,#1d4ed8); transform: translateY(-1px); }
+.stButton > button:hover { background: linear-gradient(135deg,#1e40af,#1d4ed8) !important; transform: translateY(-1px); }
+.stButton > button p, .stButton > button span { color: #fff !important; }
 
-.stTabs [data-baseweb="tab"] { color: #64748b !important; font-weight: 600; font-size: 0.85rem; border-radius: 8px 8px 0 0; padding: 8px 18px; }
-.stTabs [data-baseweb="tab"][aria-selected="true"] { color: #1d4ed8 !important; background: #eff6ff; border-bottom: 2px solid #1d4ed8; }
+/* ── tabs ── */
+.stTabs [data-baseweb="tab-list"] { background: transparent !important; border-bottom: 1px solid #bfdbfe; }
+.stTabs [data-baseweb="tab"] { color: #64748b !important; font-weight: 600; font-size: 0.85rem; border-radius: 8px 8px 0 0; padding: 8px 18px; background: transparent !important; }
+.stTabs [data-baseweb="tab"][aria-selected="true"] { color: #1d4ed8 !important; background: #eff6ff !important; border-bottom: 2px solid #1d4ed8; }
+.stTabs [data-baseweb="tab"] p, .stTabs [data-baseweb="tab"] span { color: inherit !important; }
 
-p, span, label, li, td, th, caption, .stMarkdown, div { color: #0f172a !important; }
-h1,h2,h3,h4 { color: #1e3a8a !important; }
+/* ── inputs & text boxes ── */
+input, textarea, select,
+[data-baseweb="input"] input,
+[data-baseweb="textarea"] textarea,
+[data-testid="stTextInput"] input,
+[data-testid="stNumberInput"] input {
+    background: #ffffff !important;
+    color: #0f172a !important;
+    border: 1px solid #cbd5e1 !important;
+    border-radius: 8px !important;
+}
+input::placeholder, textarea::placeholder { color: #94a3b8 !important; }
+
+/* ── select / dropdown ── */
+[data-baseweb="select"] > div,
+[data-baseweb="select"] [data-testid="stSelectbox"] {
+    background: #ffffff !important;
+    color: #0f172a !important;
+    border: 1px solid #cbd5e1 !important;
+    border-radius: 8px !important;
+}
+[data-baseweb="popover"] { background: #ffffff !important; }
+[data-baseweb="menu"] { background: #ffffff !important; }
+[data-baseweb="menu"] li, [data-baseweb="menu"] li * { color: #0f172a !important; }
+[data-baseweb="menu"] [aria-selected="true"] { background: #eff6ff !important; }
+
+/* ── radio & checkbox ── */
+[data-testid="stRadio"] label, [data-testid="stCheckbox"] label { color: #0f172a !important; }
+[data-testid="stRadio"] p, [data-testid="stCheckbox"] p { color: #0f172a !important; }
+
+/* ── file uploader ── */
+[data-testid="stFileUploadDropzone"],
+[data-testid="stFileUploader"] {
+    background: #ffffff !important;
+    border: 2px dashed #93c5fd !important;
+    border-radius: 12px !important;
+    color: #0f172a !important;
+}
+[data-testid="stFileUploadDropzone"] *,
+[data-testid="stFileUploader"] *,
+[data-testid="stFileUploaderFileName"],
+[data-testid="stFileUploaderFileData"] * { color: #0f172a !important; }
+[data-testid="stFileUploadDropzone"] small { color: #475569 !important; }
+/* "Browse files" button inside uploader */
+[data-testid="stFileUploadDropzone"] button,
+[data-testid="stFileUploadDropzone"] button span { color: #1d4ed8 !important; background: #eff6ff !important; }
+
+/* ── download button ── */
+[data-testid="stDownloadButton"] button {
+    background: #eff6ff !important;
+    color: #1d4ed8 !important;
+    border: 1px solid #bfdbfe !important;
+    border-radius: 10px;
+}
+[data-testid="stDownloadButton"] button span,
+[data-testid="stDownloadButton"] button p { color: #1d4ed8 !important; }
+
+/* ── info / warning / error / success alerts ── */
+[data-testid="stAlert"] { border-radius: 10px; }
+[data-testid="stAlert"] * { color: inherit !important; }
+
+/* ── dataframes ── */
 [data-testid="stDataFrame"] * { color: #0f172a !important; }
+[data-testid="stDataFrame"] { background: #ffffff !important; border: 1px solid #e2e8f0 !important; border-radius: 8px; }
 
-[data-testid="stProgressBar"] > div > div { background: linear-gradient(90deg,#3b82f6,#0ea5e9); }
+/* ── progress bar ── */
+[data-testid="stProgressBar"] > div { background: #dbeafe !important; border-radius: 99px; }
+[data-testid="stProgressBar"] > div > div { background: linear-gradient(90deg,#3b82f6,#0ea5e9) !important; }
+
+/* ── divider ── */
 hr { border-color: #e2e8f0 !important; }
+
+/* ── expander ── */
+[data-testid="stExpander"] { background: #ffffff !important; border: 1px solid #e2e8f0 !important; border-radius: 10px; }
+[data-testid="stExpander"] summary * { color: #1e3a8a !important; }
+
+/* ── code blocks ── */
+code, pre { background: #f1f5f9 !important; color: #1e293b !important; border-radius: 6px; }
 
 /* ── Suppress Streamlit rerun dimming ── */
 [data-stale="true"],
@@ -159,8 +249,42 @@ hr { border-color: #e2e8f0 !important; }
 </style>
 """
 
+def _render_anti_dim_js() -> None:
+    """
+    Inject a tiny MutationObserver into the parent page that immediately
+    resets opacity whenever Streamlit sets data-stale="true" during a rerun.
+    CSS !important alone loses the specificity fight against Streamlit's own
+    bundled stylesheet; directly overriding the inline style via JS wins.
+    This runs in a hidden iframe (height=0) and re-executes on every rerun so
+    the observer is always live.
+    """
+    components.html("""
+<script>
+(function() {
+  try {
+    var doc = window.parent.document;
+    function suppressStale() {
+      doc.querySelectorAll('[data-stale="true"]').forEach(function(el) {
+        el.style.setProperty('opacity',     '1',    'important');
+        el.style.setProperty('transition',  'none', 'important');
+        el.style.setProperty('filter',      'none', 'important');
+        el.style.setProperty('pointer-events', 'auto', 'important');
+      });
+    }
+    suppressStale();
+    new MutationObserver(suppressStale).observe(doc.documentElement, {
+      attributes: true,
+      subtree: true,
+      attributeFilter: ['data-stale', 'style']
+    });
+  } catch(e) {}
+})();
+</script>""", height=0)
+
+
 def apply_theme(is_dark):
     st.markdown(DARK_CSS if is_dark else LIGHT_CSS, unsafe_allow_html=True)
+    _render_anti_dim_js()
 
 
 # ═══════════════════════════════════════════════════════════════════════════════
@@ -846,6 +970,15 @@ def run_optimization():
 # ═══════════════════════════════════════════════════════════════════════════════
 # BOOT
 # ═══════════════════════════════════════════════════════════════════════════════
+
+# Inject a minimal dark background BEFORE initialize_state() runs so there is
+# no white flash on first load (dark mode is the default).  On subsequent runs
+# session_state already has the user's preference so this is a no-op.
+if st.session_state.get("dark_mode", True):
+    st.markdown(
+        "<style>.stApp{background:#050b14!important;color:#e2e8f0!important;}</style>",
+        unsafe_allow_html=True,
+    )
 
 try:
     initialize_state()
