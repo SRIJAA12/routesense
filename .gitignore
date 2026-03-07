@@ -27,6 +27,7 @@ htmlcov/
 .idea/
 .DS_Store
 Thumbs.db
+.history/
 
 # Streamlit local secrets
 .streamlit/secrets.toml
