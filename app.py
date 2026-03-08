@@ -49,31 +49,21 @@ h1, h2, h3, h4, h5, h6, p, span, label, div, li, td, th {
 /* Headings — bright blue */
 h1, h2, h3 { color: #60a5fa !important; }
 
-/* ═══ SIDEBAR — FULLY VISIBLE ═══ */
+/* ═══ SIDEBAR — VISIBLE WITH BRIGHT TEXT ═══ */
 [data-testid="stSidebar"] { 
     background: #16213e !important;
-    border-right: 2px solid #3b82f6 !important;
-    min-width: 300px !important;
-    display: block !important;
-    visibility: visible !important;
-    position: relative !important;
-    transform: translateX(0) !important;
-    transition: transform 0.3s ease !important;
+    border-right: 3px solid #3b82f6 !important;
 }
 
-/* Force sidebar to be visible - never hidden */
-[data-testid="stSidebar"][aria-hidden="true"] {
-    display: block !important;
-    visibility: visible !important;
-    transform: translateX(0) !important;
-}
-
-[data-testid="stSidebar"] * {
+[data-testid="stSidebar"] *,
+[data-testid="stSidebarContent"] * {
     color: #ffffff !important;
 }
 
-[data-testid="stSidebar"] h1, [data-testid="stSidebar"] h2, [data-testid="stSidebar"] h3 {
+[data-testid="stSidebar"] h1, [data-testid="stSidebar"] h2, [data-testid="stSidebar"] h3,
+[data-testid="stSidebar"] h4 {
     color: #60a5fa !important;
+    font-weight: 700 !important;
 }
 
 /* Sidebar radio buttons — HIGH CONTRAST */
@@ -190,62 +180,52 @@ div[role="radiogroup"]:has(label:nth-child(8)) label > div:first-child {
     display: none !important; 
 }
 
-/* ═══ SIDEBAR TOGGLE — SUPER VISIBLE ═══ */
-/* Make toggle button HUGE and IMPOSSIBLE TO MISS */
-[data-testid="stSidebarCollapseButton"], 
-[data-testid="collapsedControl"],
-[data-testid="stSidebarNav"] button,
+/* ═══ SIDEBAR TOGGLE BUTTON — GLOWING AND HUGE ═══ */
+/* Target all possible button selectors */
 button[kind="header"],
-button[kind="headerNoPadding"] {
-    position: fixed !important;
-    top: 1rem !important;
-    left: 1rem !important;
-    z-index: 9999999 !important;
-    display: block !important;
-    visibility: visible !important;
-    opacity: 1 !important;
-}
-
-[data-testid="stSidebarCollapseButton"] button, 
-[data-testid="collapsedControl"] button, 
-[data-testid="stSidebarNav"] button,
-button[kind="header"],
-button[kind="headerNoPadding"] {
+button[kind="headerNoPadding"],
+[data-testid="stSidebarCollapsedControl"] button,
+[data-testid="collapsedControl"] button,
+[data-testid="stSidebarCollapseButton"] button,
+[data-testid="baseButton-header"] {
     background: #3b82f6 !important;
     color: #ffffff !important;
-    border: 4px solid #60a5fa !important;
-    border-radius: 16px !important;
-    padding: 16px !important;
-    box-shadow: 0 0 30px rgba(59,130,246,1), 0 0 60px rgba(59,130,246,0.8) !important;
-    min-width: 64px !important;
-    min-height: 64px !important;
-    cursor: pointer !important;
+    border: 5px solid #60a5fa !important;
+    border-radius: 20px !important;
+    padding: 20px !important;
+    box-shadow: 0 0 40px #60a5fa, 0 0 80px rgba(59,130,246,0.8) !important;
+    min-width: 70px !important;
+    min-height: 70px !important;
+    width: 70px !important;
+    height: 70px !important;
     display: flex !important;
     align-items: center !important;
     justify-content: center !important;
-    animation: pulse-glow 2s infinite !important;
+    cursor: pointer !important;
+    z-index: 99999999 !important;
+    position: relative !important;
+    opacity: 1 !important;
+    visibility: visible !important;
 }
 
-@keyframes pulse-glow {
-    0%, 100% { box-shadow: 0 0 30px rgba(59,130,246,1), 0 0 60px rgba(59,130,246,0.8); }
-    50% { box-shadow: 0 0 40px rgba(96,165,250,1), 0 0 80px rgba(96,165,250,1); }
-}
-
-[data-testid="stSidebarCollapseButton"] button:hover, 
+button[kind="header"]:hover,
+button[kind="headerNoPadding"]:hover,
 [data-testid="collapsedControl"] button:hover,
-button[kind="headerNoPadding"]:hover {
+[data-testid="stSidebarCollapseButton"] button:hover {
     background: #60a5fa !important;
-    transform: scale(1.15) !important;
-    box-shadow: 0 0 50px rgba(96,165,250,1), 0 0 100px rgba(96,165,250,1) !important;
+    box-shadow: 0 0 60px #60a5fa, 0 0 120px rgba(96,165,250,1) !important;
+    transform: scale(1.2) !important;
 }
 
-[data-testid="stSidebarCollapseButton"] svg, 
+button[kind="header"] svg,
+button[kind="headerNoPadding"] svg,
 [data-testid="collapsedControl"] svg,
-button[kind="headerNoPadding"] svg {
+[data-testid="stSidebarCollapseButton"] svg {
     fill: #ffffff !important;
     stroke: #ffffff !important;
-    width: 32px !important;
-    height: 32px !important;
+    width: 36px !important;
+    height: 36px !important;
+    color: #ffffff !important;
 }
 
 /* ═══ ALERTS & INFO — VISIBLE ═══ */
