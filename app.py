@@ -56,6 +56,16 @@ h1, h2, h3 { color: #60a5fa !important; }
     min-width: 300px !important;
     display: block !important;
     visibility: visible !important;
+    position: relative !important;
+    transform: translateX(0) !important;
+    transition: transform 0.3s ease !important;
+}
+
+/* Force sidebar to be visible - never hidden */
+[data-testid="stSidebar"][aria-hidden="true"] {
+    display: block !important;
+    visibility: visible !important;
+    transform: translateX(0) !important;
 }
 
 [data-testid="stSidebar"] * {
@@ -181,31 +191,61 @@ div[role="radiogroup"]:has(label:nth-child(8)) label > div:first-child {
 }
 
 /* ═══ SIDEBAR TOGGLE — SUPER VISIBLE ═══ */
-[data-testid="stSidebarCollapseButton"], [data-testid="collapsedControl"] {
+/* Make toggle button HUGE and IMPOSSIBLE TO MISS */
+[data-testid="stSidebarCollapseButton"], 
+[data-testid="collapsedControl"],
+[data-testid="stSidebarNav"] button,
+button[kind="header"],
+button[kind="headerNoPadding"] {
     position: fixed !important;
     top: 1rem !important;
     left: 1rem !important;
-    z-index: 999999 !important;
+    z-index: 9999999 !important;
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
 }
 
 [data-testid="stSidebarCollapseButton"] button, 
 [data-testid="collapsedControl"] button, 
+[data-testid="stSidebarNav"] button,
+button[kind="header"],
 button[kind="headerNoPadding"] {
     background: #3b82f6 !important;
     color: #ffffff !important;
-    border: 3px solid #60a5fa !important;
-    border-radius: 12px !important;
-    padding: 12px !important;
-    box-shadow: 0 4px 20px rgba(59,130,246,0.8) !important;
-    min-width: 48px !important;
-    min-height: 48px !important;
+    border: 4px solid #60a5fa !important;
+    border-radius: 16px !important;
+    padding: 16px !important;
+    box-shadow: 0 0 30px rgba(59,130,246,1), 0 0 60px rgba(59,130,246,0.8) !important;
+    min-width: 64px !important;
+    min-height: 64px !important;
+    cursor: pointer !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    animation: pulse-glow 2s infinite !important;
+}
+
+@keyframes pulse-glow {
+    0%, 100% { box-shadow: 0 0 30px rgba(59,130,246,1), 0 0 60px rgba(59,130,246,0.8); }
+    50% { box-shadow: 0 0 40px rgba(96,165,250,1), 0 0 80px rgba(96,165,250,1); }
+}
+
+[data-testid="stSidebarCollapseButton"] button:hover, 
+[data-testid="collapsedControl"] button:hover,
+button[kind="headerNoPadding"]:hover {
+    background: #60a5fa !important;
+    transform: scale(1.15) !important;
+    box-shadow: 0 0 50px rgba(96,165,250,1), 0 0 100px rgba(96,165,250,1) !important;
 }
 
 [data-testid="stSidebarCollapseButton"] svg, 
-[data-testid="collapsedControl"] svg {
+[data-testid="collapsedControl"] svg,
+button[kind="headerNoPadding"] svg {
     fill: #ffffff !important;
-    width: 24px !important;
-    height: 24px !important;
+    stroke: #ffffff !important;
+    width: 32px !important;
+    height: 32px !important;
 }
 
 /* ═══ ALERTS & INFO — VISIBLE ═══ */
