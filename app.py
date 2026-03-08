@@ -764,14 +764,22 @@ def initialize_state():
     if "deliveries" not in st.session_state:
         # Try to restore last known routes from the global cache first
         if not _restore_routes_from_cache():
-            d,f=load_operational_data()
-            st.session_state.deliveries=d; st.session_state.fleet=f
+            try:
+                d,f=load_operational_data()
+                st.session_state.deliveries=d; st.session_state.fleet=f
+            except Exception:
+                # Fallback to empty frames — user can upload data via Upload tab
+                st.session_state.deliveries=pd.DataFrame(columns=["id","location","lat","lon","demand","type"])
+                st.session_state.fleet=pd.DataFrame(columns=["vehicle_id","capacity"])
     if "route" not in st.session_state: st.session_state.route=None
     if "vehicle_index" not in st.session_state: st.session_state.vehicle_index=1
     if "route_distance" not in st.session_state: st.session_state.route_distance=0.0
     if "baseline_distance" not in st.session_state:
-        dm=create_distance_matrix(st.session_state.deliveries)
-        st.session_state.baseline_distance=sequential_route_distance(dm)
+        try:
+            dm=create_distance_matrix(st.session_state.deliveries)
+            st.session_state.baseline_distance=sequential_route_distance(dm)
+        except Exception:
+            st.session_state.baseline_distance=0.0
     if "status_message" not in st.session_state:
         store = _global_route_store()
         if store.get("route") or store.get("driver_routes"):
@@ -845,7 +853,7 @@ try:
     initialize_state()
 except Exception as exc:
     st.error(f"Unable to load operational data: {exc}")
-    st.stop()
+    # Do NOT st.stop() — sidebar and rest of app must still render
 
 apply_theme()
 
