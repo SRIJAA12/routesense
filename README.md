@@ -1,12 +1,19 @@
-# 🚚 RouteSense — AI-Powered Logistics Route Intelligence
+#  RouteSense — AI-Powered Logistics Route Intelligence
+ Live Demo
+
+**[routesense.onrender.com](https://routesense-xeit.onrender.com)**
+
 
 **RouteSense** is a full-stack logistics operations dashboard built with Streamlit. It solves multi-vehicle delivery routing using Google OR-Tools VRP, visualizes live fleet status on interactive maps, predicts delay risk using time-of-day AI scoring, and delivers voice-guided driver briefings in English, Hindi, and Tamil.
 
 > Built as a prototype for real-world last-mile delivery operations.
 
----
+Architecture Diagram
+![WhatsApp Image 2026-03-06 at 9 54 16 PM](https://github.com/user-attachments/assets/6d9139ce-e70d-4eeb-97aa-b50492ba22f9)
 
-## ✨ Features at a Glance
+User flow Diagram 
+<img width="1376" height="768" alt="RouteSense AI User Interaction Diagram" src="https://github.com/user-attachments/assets/d39f5841-0a3b-40d4-919d-a97d410849e9" />
+
 
 | Feature | Description |
 |---|---|
@@ -21,13 +28,6 @@
 | 📊 **Analytics Dashboard** | Charts for distance, demand, fuel, CO₂, and capacity utilisation |
 | 🌙 / ☀️ **Dark / Light Theme** | Glassmorphism dark mode + clean light mode, toggleable per session |
 
----
-
-## 🖥️ Live Demo
-
-**[routesense.onrender.com](https://routesense-xeit.onrender.com)**
-
----
 
 ## 🗂️ Project Structure
 
@@ -165,20 +165,3 @@ The app is deployed via [render.yaml](render.yaml). To deploy your own instance:
 4. Set build command: `pip install -r requirements.txt`
 5. Set start command: `streamlit run app.py --server.port $PORT --server.address 0.0.0.0`
 
----
-
-## 📸 Screenshots
-
-| Dark Mode Dashboard | Operations Map |
-|---|---|
-| Admin KPI cards with glassmorphism styling | Color-coded multi-driver route overview |
-
----
-
-## 📄 License
-
-MIT License — free to use, modify, and distribute.
-
----
-
-*Made with ❤️ for logistics intelligence.*
