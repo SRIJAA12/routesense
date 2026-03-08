@@ -27,160 +27,44 @@ DARK_CSS = """
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
 
+/* base="dark" in config.toml — Streamlit renders all widgets dark natively.
+   This CSS only adds gradient background, card gloss, and button styling. */
+
 html, body, .stApp { font-family: 'Inter', sans-serif !important; }
+.stApp { background: radial-gradient(ellipse at top, #0d1b2a 0%, #050b14 60%, #020608 100%) !important; }
 
-.stApp { background: radial-gradient(ellipse at top, #0d1b2a 0%, #050b14 60%, #020608 100%); color: #e2e8f0 !important; }
-
-/* glassmorphism cards */
+/* glassmorphism metric cards */
 [data-testid="stMetric"] {
-    background: rgba(255,255,255,0.04);
-    border: 1px solid rgba(255,255,255,0.10);
-    border-radius: 14px;
-    padding: 16px 20px;
+    background: rgba(255,255,255,0.04) !important;
+    border: 1px solid rgba(255,255,255,0.10) !important;
+    border-radius: 14px !important; padding: 16px 20px !important;
     backdrop-filter: blur(12px);
-    box-shadow: 0 4px 20px rgba(0,0,0,0.4);
+    box-shadow: 0 4px 20px rgba(0,0,0,0.4) !important;
     transition: transform 0.2s;
 }
 [data-testid="stMetric"]:hover { transform: translateY(-2px); }
 [data-testid="stMetricValue"] { font-size: 1.5rem !important; font-weight: 700 !important; color: #93c5fd !important; }
 [data-testid="stMetricLabel"] { color: #94a3b8 !important; font-size: 0.75rem !important; text-transform: uppercase; letter-spacing: 0.08em; }
 
-/* sidebar */
-[data-testid="stSidebar"] { background: linear-gradient(180deg,#0b1623 0%,#060f1c 100%); border-right: 1px solid rgba(255,255,255,0.07); }
-[data-testid="stSidebar"] * { color: #cbd5e1 !important; }
-[data-testid="stSidebar"] h1,[data-testid="stSidebar"] h2,[data-testid="stSidebar"] h3 { color: #f1f5f9 !important; }
+/* sidebar gradient */
+[data-testid="stSidebar"] { background: linear-gradient(180deg,#0b1623 0%,#060f1c 100%) !important; border-right: 1px solid rgba(255,255,255,0.07) !important; }
 
 /* buttons */
 .stButton > button {
-    background: linear-gradient(135deg,#2563eb,#1d4ed8);
-    color: #fff !important;
-    border: none; border-radius: 10px;
-    font-weight: 600; font-size: 0.85rem;
-    width: 100%; padding: 0.55rem 1rem;
-    box-shadow: 0 2px 12px rgba(37,99,235,0.35);
-    transition: all 0.2s;
+    background: linear-gradient(135deg,#2563eb,#1d4ed8) !important;
+    color: #fff !important; border: none !important; border-radius: 10px !important;
+    font-weight: 600 !important; font-size: 0.85rem !important;
+    width: 100% !important; padding: 0.55rem 1rem !important;
+    box-shadow: 0 2px 12px rgba(37,99,235,0.35) !important; transition: all 0.2s;
 }
-.stButton > button:hover { background: linear-gradient(135deg,#1d4ed8,#1e40af); transform: translateY(-1px); box-shadow: 0 4px 18px rgba(37,99,235,0.5); }
-
-/* tabs */
-.stTabs [data-baseweb="tab-list"] { gap: 4px; border-bottom: 1px solid rgba(255,255,255,0.08); }
-.stTabs [data-baseweb="tab"] { border-radius: 8px 8px 0 0; padding: 8px 18px; color: #64748b !important; font-weight: 600; font-size: 0.85rem; }
-.stTabs [data-baseweb="tab"][aria-selected="true"] { color: #60a5fa !important; background: rgba(96,165,250,0.08); border-bottom: 2px solid #3b82f6; }
-
-/* dataframes */
-[data-testid="stDataFrame"] * { color: #e2e8f0 !important; }
-[data-testid="stDataFrame"] { background: rgba(255,255,255,0.04) !important; }
-
-/* text */
-html, body { color: #e2e8f0 !important; background: #050b14 !important; }
-p, span, label, li, td, th, caption, .stMarkdown { color: #cbd5e1 !important; }
-h1,h2,h3,h4 { color: #f8fafc !important; }
-
-/* force every generic div inside the main area to inherit dark text */
-section[data-testid="stMain"] div,
-div[data-testid="stMainBlockContainer"] div { color: #cbd5e1 !important; }
-
-/* form inputs — must override since base="light" gives them light native styling */
-input, textarea,
-[data-baseweb="input"] > div,
-[data-baseweb="textarea"] > div,
-[data-testid="stTextInput"] > div,
-[data-testid="stNumberInput"] > div {
-    background: rgba(255,255,255,0.08) !important;
-    color: #e2e8f0 !important;
-    border: 1px solid rgba(255,255,255,0.18) !important;
-    border-radius: 8px !important;
-}
-input::placeholder, textarea::placeholder { color: #64748b !important; }
-
-/* ── widget container backgrounds — prevent light-base white bleed-through ── */
-/* Radio group containers and every direct child label */
-[data-baseweb="radio-group"] { background: transparent !important; }
-[data-baseweb="radio-group"] > label { background: transparent !important; color: #cbd5e1 !important; }
-/* The clickable radio circle */
-[data-baseweb="radio"] span:first-child {
-    background: rgba(255,255,255,0.06) !important;
-    border-color: rgba(255,255,255,0.30) !important;
-}
-[data-baseweb="radio"] [aria-checked="true"] span:first-child,
-[data-baseweb="radio"][aria-checked="true"] span:first-child {
-    background: #3b82f6 !important;
-    border-color: #3b82f6 !important;
-}
-/* Sidebar radio — all states */
-[data-testid="stSidebar"] [data-baseweb="radio-group"],
-[data-testid="stSidebar"] [data-baseweb="radio-group"] > label,
-[data-testid="stSidebar"] [data-baseweb="radio"] { background: transparent !important; }
-/* StRadio / selectbox / checkbox outer containers */
-.stRadio > div, .stSelectbox > div, .stCheckbox > label,
-[data-testid="stWidgetLabel"] { background: transparent !important; }
-/* Widget label text */
-[data-testid="stWidgetLabel"] p,
-[data-testid="stWidgetLabel"] span { color: #94a3b8 !important; }
-/* Number-input stepper buttons — keep SVG arrows visible */
-[data-testid="stNumberInput"] button {
-    background: rgba(255,255,255,0.08) !important;
-    border-color: rgba(255,255,255,0.15) !important;
-    color: #e2e8f0 !important;
-}
-[data-testid="stNumberInput"] button svg { fill: #e2e8f0 !important; stroke: #e2e8f0 !important; }
-/* File-uploader inner text */
-[data-testid="stFileUploaderDropzone"] p,
-[data-testid="stFileUploaderDropzone"] span,
-[data-testid="stFileUploaderDropzone"] small { color: #94a3b8 !important; }
-/* Ensure every Streamlit main-area widget wrapper is transparent */
-.stButton, .stDownloadButton, .stRadio, .stCheckbox, .stSelectbox,
-.stTextInput, .stNumberInput, .stFileUploader, .stDataFrame,
-.stMetric, .stAlert, .stExpander { background: transparent !important; }
-
-/* select / dropdown */
-[data-baseweb="select"] > div {
-    background: rgba(255,255,255,0.08) !important;
-    color: #e2e8f0 !important;
-    border: 1px solid rgba(255,255,255,0.18) !important;
-    border-radius: 8px !important;
-}
-[data-baseweb="popover"] { background: #1e293b !important; }
-[data-baseweb="menu"] { background: #1e293b !important; }
-[data-baseweb="menu"] li, [data-baseweb="menu"] li * { color: #e2e8f0 !important; background: transparent !important; }
-[data-baseweb="menu"] [aria-selected="true"] { background: rgba(96,165,250,0.15) !important; }
-
-/* radio & checkbox labels */
-[data-testid="stRadio"] label p, [data-testid="stCheckbox"] label p { color: #cbd5e1 !important; }
-
-/* file uploader */
-[data-testid="stFileUploader"] section,
-[data-testid="stFileUploaderDropzone"] {
-    background: rgba(255,255,255,0.06) !important;
-    border: 2px dashed rgba(96,165,250,0.4) !important;
-    border-radius: 12px !important;
-}
-[data-testid="stFileUploader"] button,
-[data-testid="stFileUploaderDropzone"] button {
-    background: rgba(37,99,235,0.25) !important;
-    color: #93c5fd !important;
-    border: 1px solid rgba(96,165,250,0.3) !important;
-    border-radius: 8px !important;
-}
-[data-testid="stFileUploader"] button *,
-[data-testid="stFileUploaderDropzone"] button * { color: #93c5fd !important; }
+.stButton > button:hover { background: linear-gradient(135deg,#1d4ed8,#1e40af) !important; transform: translateY(-1px); box-shadow: 0 4px 18px rgba(37,99,235,0.5) !important; }
 
 /* download button */
 [data-testid="stDownloadButton"] button { background: rgba(37,99,235,0.25) !important; color: #93c5fd !important; border: 1px solid rgba(96,165,250,0.3) !important; }
 [data-testid="stDownloadButton"] button * { color: #93c5fd !important; }
 
-/* expander */
-[data-testid="stExpander"] { background: rgba(255,255,255,0.04) !important; border: 1px solid rgba(255,255,255,0.10) !important; border-radius: 10px; }
-[data-testid="stExpander"] summary * { color: #e2e8f0 !important; }
-
-/* code */
-code, pre { background: rgba(255,255,255,0.06) !important; color: #e2e8f0 !important; }
-
-/* info / warning */
-[data-testid="stAlert"] { border-radius: 10px; }
-
 /* progress bar */
-[data-testid="stProgressBar"] > div > div { background: linear-gradient(90deg,#3b82f6,#06b6d4); }
+[data-testid="stProgressBar"] > div > div { background: linear-gradient(90deg,#3b82f6,#06b6d4) !important; }
 
 /* divider */
 hr { border-color: rgba(255,255,255,0.07) !important; }
@@ -188,7 +72,7 @@ hr { border-color: rgba(255,255,255,0.07) !important; }
 /* ── admin nav radio styled as tab bar ── */
 div[role="radiogroup"]:has(label:nth-child(8)) {
     gap: 0 !important; flex-wrap: nowrap !important; overflow-x: auto !important;
-    border-bottom: 1px solid rgba(255,255,255,0.08) !important; padding: 0 !important;
+    border-bottom: 1px solid rgba(255,255,255,0.12) !important; padding: 0 !important;
 }
 div[role="radiogroup"]:has(label:nth-child(8)) > label {
     padding: 6px 11px !important; border-radius: 8px 8px 0 0 !important;
@@ -196,9 +80,10 @@ div[role="radiogroup"]:has(label:nth-child(8)) > label {
     color: #94a3b8 !important; cursor: pointer !important; margin-bottom: -2px !important;
     white-space: nowrap !important; flex-shrink: 0 !important;
     display: inline-flex !important; align-items: center !important; gap: 4px !important;
+    background: transparent !important;
 }
 div[role="radiogroup"]:has(label:nth-child(8)) > label:has(input:checked) {
-    color: #60a5fa !important; background: rgba(96,165,250,0.08) !important;
+    color: #60a5fa !important; background: rgba(96,165,250,0.10) !important;
     border-bottom: 2px solid #3b82f6 !important;
 }
 div[role="radiogroup"]:has(label:nth-child(8)) label > div:first-child { display: none !important; }
@@ -206,54 +91,23 @@ div[role="radiogroup"]:has(label:nth-child(8)) label p {
     color: inherit !important; white-space: nowrap !important; margin: 0 !important;
 }
 
-/* ── Suppress Streamlit rerun dimming ──────────────────────────────────────
-   Streamlit sets data-stale="true" on the app root during every rerun which
-   fades the whole page to ~30% opacity.  BetterStack / UptimeRobot health
-   pings wake the WebSocket and trigger reruns, making the site flash dim
-   every few seconds.  Force full opacity and kill the transition so the
-   dim effect is completely invisible to the user.                        */
-[data-stale="true"],
-[data-stale="true"] > * {
-    opacity: 1 !important;
-    transition: none !important;
-    filter: none !important;
-}
-/* Hide the spinning "Running…" status widget in the top-right corner */
+/* header */
+[data-testid="stHeader"] { background: #050b14 !important; border-bottom: 1px solid rgba(255,255,255,0.07) !important; }
+
+/* suppress Streamlit stale-dim */
+[data-stale="true"], [data-stale="true"] > * { opacity: 1 !important; transition: none !important; filter: none !important; }
 [data-testid="stStatusWidget"] { display: none !important; }
-/* Hide the top rainbow decoration bar */
 #stDecoration { display: none !important; }
-/* Hide the deploy / kebab toolbar that briefly appears on rerun */
 [data-testid="stToolbar"] { display: none !important; }
 
-/* ── header bar (the white strip at the very top) ── */
-[data-testid="stHeader"] {
-    background: #050b14 !important;
-    border-bottom: 1px solid rgba(255,255,255,0.07) !important;
+/* sidebar toggle */
+[data-testid="stSidebarCollapseButton"], [data-testid="collapsedControl"] { position: relative !important; z-index: 9999 !important; }
+[data-testid="stSidebarCollapseButton"] button, [data-testid="collapsedControl"] button, button[kind="headerNoPadding"] {
+    color: #f1f5f9 !important; background: #2563eb !important;
+    border: 2px solid #60a5fa !important; border-radius: 8px !important;
+    padding: 6px 10px !important; box-shadow: 0 2px 12px rgba(37,99,235,0.6) !important; opacity: 1 !important;
 }
-/* sidebar collapse / expand toggle button — dark theme */
-[data-testid="stSidebarCollapseButton"],
-[data-testid="collapsedControl"] {
-    position: relative !important;
-    z-index: 9999 !important;
-}
-[data-testid="stSidebarCollapseButton"] button,
-[data-testid="collapsedControl"] button,
-button[kind="headerNoPadding"] {
-    color: #f1f5f9 !important;
-    background: #2563eb !important;
-    border: 2px solid #60a5fa !important;
-    border-radius: 8px !important;
-    padding: 6px 10px !important;
-    box-shadow: 0 2px 12px rgba(37,99,235,0.6) !important;
-    opacity: 1 !important;
-}
-[data-testid="stSidebarCollapseButton"] button:hover,
-[data-testid="collapsedControl"] button:hover {
-    background: #1d4ed8 !important;
-    box-shadow: 0 4px 18px rgba(37,99,235,0.8) !important;
-}
-[data-testid="stSidebarCollapseButton"] svg,
-[data-testid="collapsedControl"] svg { fill: #ffffff !important; stroke: #ffffff !important; width: 20px !important; height: 20px !important; }
+[data-testid="stSidebarCollapseButton"] svg, [data-testid="collapsedControl"] svg { fill: #ffffff !important; stroke: #ffffff !important; width: 20px !important; height: 20px !important; }
 </style>
 """
 
@@ -261,132 +115,106 @@ LIGHT_CSS = """
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
 
-/* base=light in config.toml means Streamlit handles native widget colors.
-   This CSS only adds visual enhancements on top. */
-html, body, .stApp { font-family: 'Inter', sans-serif !important; }
+/* base="dark" in config.toml — LIGHT_CSS must explicitly force light for every element */
+html, body, .stApp { font-family: 'Inter', sans-serif !important; color: #0f172a !important; }
+.stApp { background: linear-gradient(160deg,#f0f7ff 0%,#e8f0fe 50%,#f5f3ff 100%) !important; }
 
-/* custom gradient background */
-.stApp {
-    background: linear-gradient(160deg,#f0f7ff 0%,#e8f0fe 50%,#f5f3ff 100%) !important;
-}
-.main .block-container,
+/* main content area */
 section[data-testid="stMain"],
-div[data-testid="stMainBlockContainer"] { background: transparent !important; }
+div[data-testid="stMainBlockContainer"],
+.main .block-container { background: transparent !important; color: #0f172a !important; }
 
-/* headings */
+/* all text */
+p, span, label, li, td, th, caption, .stMarkdown, div { color: #1e293b !important; }
 h1,h2,h3,h4,h5,h6 { color: #1e3a8a !important; }
 
-/* ── metric cards ── */
-[data-testid="stMetric"] {
-    background: #ffffff !important;
-    border: 1px solid #dbeafe !important;
-    border-radius: 14px !important;
-    padding: 16px 20px !important;
-    box-shadow: 0 2px 10px rgba(59,130,246,0.08) !important;
-    transition: transform 0.2s;
-}
+/* sidebar — force white */
+[data-testid="stSidebar"], [data-testid="stSidebar"] > div { background: #ffffff !important; border-right: 1px solid #bfdbfe !important; }
+[data-testid="stSidebar"] * { color: #1e293b !important; }
+[data-testid="stSidebar"] h1,[data-testid="stSidebar"] h2,[data-testid="stSidebar"] h3 { color: #1e3a8a !important; }
+
+/* native widget backgrounds — override dark-base defaults */
+input, textarea { background: #ffffff !important; color: #0f172a !important; border: 1px solid #cbd5e1 !important; border-radius: 8px !important; }
+[data-baseweb="input"] > div, [data-baseweb="textarea"] > div { background: #ffffff !important; color: #0f172a !important; border: 1px solid #cbd5e1 !important; }
+[data-baseweb="select"] > div { background: #ffffff !important; color: #0f172a !important; border: 1px solid #cbd5e1 !important; border-radius: 8px !important; }
+[data-baseweb="popover"], [data-baseweb="menu"] { background: #ffffff !important; }
+[data-baseweb="menu"] li, [data-baseweb="menu"] li * { color: #0f172a !important; background: transparent !important; }
+[data-baseweb="radio-group"] > label, [data-testid="stRadio"] label p, [data-testid="stCheckbox"] label p { color: #1e293b !important; }
+
+/* metric cards */
+[data-testid="stMetric"] { background: #ffffff !important; border: 1px solid #dbeafe !important; border-radius: 14px !important; padding: 16px 20px !important; box-shadow: 0 2px 10px rgba(59,130,246,0.08) !important; transition: transform 0.2s; }
 [data-testid="stMetric"]:hover { transform: translateY(-2px); }
 [data-testid="stMetricValue"] { font-size: 1.5rem !important; font-weight: 700 !important; color: #1d4ed8 !important; }
 [data-testid="stMetricLabel"] { color: #64748b !important; font-size: 0.75rem !important; text-transform: uppercase; letter-spacing: 0.08em; }
 
-/* ── sidebar ── */
-[data-testid="stSidebar"], [data-testid="stSidebar"] > div { background: #ffffff !important; border-right: 1px solid #bfdbfe !important; }
-
-/* ── buttons ── */
-.stButton > button {
-    background: linear-gradient(135deg,#1d4ed8,#2563eb) !important;
-    color: #ffffff !important;
-    border: none !important; border-radius: 10px !important;
-    font-weight: 600 !important; font-size: 0.85rem !important;
-    width: 100% !important; padding: 0.55rem 1rem !important;
-    box-shadow: 0 2px 10px rgba(29,78,216,0.25) !important;
-    transition: all 0.2s;
-}
-.stButton > button *, div[data-testid="stButton"] > button * { color: #ffffff !important; background: transparent !important; }
+/* buttons */
+.stButton > button { background: linear-gradient(135deg,#1d4ed8,#2563eb) !important; color: #ffffff !important; border: none !important; border-radius: 10px !important; font-weight: 600 !important; width: 100% !important; padding: 0.55rem 1rem !important; box-shadow: 0 2px 10px rgba(29,78,216,0.25) !important; transition: all 0.2s; }
+.stButton > button * { color: #ffffff !important; background: transparent !important; }
 .stButton > button:hover { background: linear-gradient(135deg,#1e40af,#1d4ed8) !important; transform: translateY(-1px); }
-
-/* ── download button ── */
 [data-testid="stDownloadButton"] button { background: #eff6ff !important; color: #1d4ed8 !important; border: 1px solid #bfdbfe !important; border-radius: 10px !important; }
 [data-testid="stDownloadButton"] button * { color: #1d4ed8 !important; }
 
-/* ── progress bar ── */
+/* file uploader */
+[data-testid="stFileUploader"] section, [data-testid="stFileUploaderDropzone"] { background: #f8fafc !important; border: 2px dashed #93c5fd !important; border-radius: 12px !important; }
+[data-testid="stFileUploaderDropzone"] p, [data-testid="stFileUploaderDropzone"] span, [data-testid="stFileUploaderDropzone"] small { color: #64748b !important; }
+
+/* expander */
+[data-testid="stExpander"] { background: #ffffff !important; border: 1px solid #e2e8f0 !important; border-radius: 10px !important; }
+[data-testid="stExpander"] summary * { color: #1e293b !important; }
+
+/* dataframe */
+[data-testid="stDataFrame"] { background: #ffffff !important; }
+[data-testid="stDataFrame"] * { color: #1e293b !important; }
+
+/* alerts */
+[data-testid="stAlert"] { border-radius: 10px !important; }
+
+/* progress */
 [data-testid="stProgressBar"] > div { background: #dbeafe !important; border-radius: 99px; }
 [data-testid="stProgressBar"] > div > div { background: linear-gradient(90deg,#3b82f6,#0ea5e9) !important; }
 
-/* ── divider ── */
+/* divider */
 hr { border-color: #e2e8f0 !important; }
 
-/* ── admin nav radio styled as tab bar ── */
+/* ── admin nav radio as tab bar ── */
 div[role="radiogroup"]:has(label:nth-child(8)) {
     gap: 0 !important; flex-wrap: nowrap !important; overflow-x: auto !important;
     border-bottom: 1px solid #bfdbfe !important; padding: 0 !important;
 }
 div[role="radiogroup"]:has(label:nth-child(8)) > label {
     padding: 6px 11px !important; border-radius: 8px 8px 0 0 !important;
-    font-weight: 600 !important; font-size: 0.78rem !important;
+    font-weight: 600 !important; font-size: 0.78rem !important; color: #64748b !important;
     cursor: pointer !important; margin-bottom: -2px !important;
     white-space: nowrap !important; flex-shrink: 0 !important;
     display: inline-flex !important; align-items: center !important; gap: 4px !important;
+    background: transparent !important;
 }
-div[role="radiogroup"]:has(label:nth-child(8)) > label:has(input:checked) {
-    color: #1d4ed8 !important; background: #eff6ff !important;
-    border-bottom: 2px solid #1d4ed8 !important;
-}
+div[role="radiogroup"]:has(label:nth-child(8)) > label:has(input:checked) { color: #1d4ed8 !important; background: #eff6ff !important; border-bottom: 2px solid #1d4ed8 !important; }
 div[role="radiogroup"]:has(label:nth-child(8)) label > div:first-child { display: none !important; }
-div[role="radiogroup"]:has(label:nth-child(8)) label p {
-    white-space: nowrap !important; margin: 0 !important;
-}
+div[role="radiogroup"]:has(label:nth-child(8)) label p { white-space: nowrap !important; margin: 0 !important; color: inherit !important; }
 
-/* ── Suppress Streamlit rerun dimming ── */
-[data-stale="true"],
-[data-stale="true"] > * {
-    opacity: 1 !important;
-    transition: none !important;
-    filter: none !important;
-}
+/* plotly light text */
+.js-plotly-plot .plotly text, .js-plotly-plot .plotly .gtitle,
+.js-plotly-plot .plotly .xtick text, .js-plotly-plot .plotly .ytick text,
+.js-plotly-plot .plotly .legendtext { fill: #1e293b !important; }
+
+/* suppress stale dim */
+[data-stale="true"], [data-stale="true"] > * { opacity: 1 !important; transition: none !important; filter: none !important; }
 [data-testid="stStatusWidget"] { display: none !important; }
 #stDecoration { display: none !important; }
 [data-testid="stToolbar"] { display: none !important; }
 
-/* ── plotly chart text — override white SVG text in light mode ── */
-.js-plotly-plot .plotly text,
-.js-plotly-plot .plotly .gtitle,
-.js-plotly-plot .plotly .xtick text,
-.js-plotly-plot .plotly .ytick text,
-.js-plotly-plot .plotly .legendtext,
-.js-plotly-plot .plotly .g-gtitle text { fill: #1e293b !important; }
+/* header */
+[data-testid="stHeader"] { background: transparent !important; backdrop-filter: none !important; box-shadow: none !important; border-bottom: none !important; }
 
-/* ── header bar — make transparent to show gradient behind it ── */
-[data-testid="stHeader"] {
-    background: transparent !important;
-    backdrop-filter: none !important;
-    box-shadow: none !important;
-    border-bottom: none !important;
+/* sidebar toggle */
+[data-testid="stSidebarCollapseButton"], [data-testid="collapsedControl"] { position: relative !important; z-index: 9999 !important; }
+[data-testid="stSidebarCollapseButton"] button, [data-testid="collapsedControl"] button, button[kind="headerNoPadding"] {
+    color: #ffffff !important; background: #1d4ed8 !important;
+    border: 2px solid #3b82f6 !important; border-radius: 8px !important;
+    padding: 6px 10px !important; box-shadow: 0 2px 12px rgba(29,78,216,0.45) !important; opacity: 1 !important;
 }
-/* sidebar collapse / expand toggle button — light theme */
-[data-testid="stSidebarCollapseButton"],
-[data-testid="collapsedControl"] {
-    position: relative !important;
-    z-index: 9999 !important;
-}
-[data-testid="stSidebarCollapseButton"] button,
-[data-testid="collapsedControl"] button,
-button[kind="headerNoPadding"] {
-    color: #ffffff !important;
-    background: #1d4ed8 !important;
-    border: 2px solid #3b82f6 !important;
-    border-radius: 8px !important;
-    padding: 6px 10px !important;
-    box-shadow: 0 2px 12px rgba(29,78,216,0.45) !important;
-    opacity: 1 !important;
-}
-[data-testid="stSidebarCollapseButton"] button:hover,
-[data-testid="collapsedControl"] button:hover {
-    background: #1e40af !important;
-    box-shadow: 0 4px 18px rgba(29,78,216,0.65) !important;
-}
-[data-testid="stSidebarCollapseButton"] svg,
-[data-testid="collapsedControl"] svg { fill: #ffffff !important; stroke: #ffffff !important; width: 20px !important; height: 20px !important; }
+[data-testid="stSidebarCollapseButton"] svg, [data-testid="collapsedControl"] svg { fill: #ffffff !important; stroke: #ffffff !important; width: 20px !important; height: 20px !important; }
 </style>
 """
 
