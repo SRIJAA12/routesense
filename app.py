@@ -46,8 +46,64 @@ html, body, .stApp { font-family: 'Inter', sans-serif !important; }
 [data-testid="stMetricValue"] { font-size: 1.5rem !important; font-weight: 700 !important; color: #93c5fd !important; }
 [data-testid="stMetricLabel"] { color: #94a3b8 !important; font-size: 0.75rem !important; text-transform: uppercase; letter-spacing: 0.08em; }
 
-/* sidebar gradient */
-[data-testid="stSidebar"] { background: linear-gradient(180deg,#0b1623 0%,#060f1c 100%) !important; border-right: 1px solid rgba(255,255,255,0.07) !important; }
+/* sidebar gradient — force always visible */
+[data-testid="stSidebar"] { 
+    background: linear-gradient(180deg,#0b1623 0%,#060f1c 100%) !important; 
+    border-right: 1px solid rgba(255,255,255,0.07) !important;
+    min-width: 280px !important;
+    width: 280px !important;
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+}
+[data-testid="stSidebar"][aria-expanded="false"] {
+    display: block !important;
+    visibility: visible !important;
+}
+[data-testid="stSidebarContent"] {
+    display: block !important;
+    visibility: visible !important;
+}
+/* all sidebar text bright and visible */
+[data-testid="stSidebar"] *, [data-testid="stSidebar"] h1, [data-testid="stSidebar"] h2, 
+[data-testid="stSidebar"] h3, [data-testid="stSidebar"] h4, [data-testid="stSidebar"] p,
+[data-testid="stSidebar"] span, [data-testid="stSidebar"] label, [data-testid="stSidebar"] div {
+    color: #e2e8f0 !important;
+}
+[data-testid="stSidebar"] .stMarkdown h2, [data-testid="stSidebar"] .stMarkdown h3, [data-testid="stSidebar"] .stMarkdown h4 {
+    color: #93c5fd !important;
+}
+[data-testid="stSidebar"] .stCaption, [data-testid="stSidebar"] [data-testid="stCaptionContainer"] {
+    color: #94a3b8 !important;
+}
+/* sidebar radio buttons — ensure visible */
+[data-testid="stSidebar"] [data-testid="stRadio"] label {
+    color: #e2e8f0 !important;
+    background: rgba(255,255,255,0.05) !important;
+    padding: 8px 16px !important;
+    border-radius: 8px !important;
+    margin: 4px 0 !important;
+    cursor: pointer !important;
+}
+[data-testid="stSidebar"] [data-testid="stRadio"] label:has(input:checked) {
+    background: rgba(37,99,235,0.3) !important;
+    color: #93c5fd !important;
+    border: 1px solid #3b82f6 !important;
+}
+/* sidebar buttons — bright and clickable */
+[data-testid="stSidebar"] .stButton button {
+    background: linear-gradient(135deg,#2563eb,#1d4ed8) !important;
+    color: #ffffff !important;
+    border: none !important;
+    padding: 10px 20px !important;
+    font-weight: 600 !important;
+    width: 100% !important;
+    margin: 4px 0 !important;
+}
+[data-testid="stSidebar"] hr {
+    border-color: rgba(255,255,255,0.15) !important;
+    margin: 16px 0 !important;
+}
 
 /* buttons */
 .stButton > button {
@@ -100,14 +156,41 @@ div[role="radiogroup"]:has(label:nth-child(8)) label p {
 #stDecoration { display: none !important; }
 [data-testid="stToolbar"] { display: none !important; }
 
-/* sidebar toggle */
-[data-testid="stSidebarCollapseButton"], [data-testid="collapsedControl"] { position: relative !important; z-index: 9999 !important; }
-[data-testid="stSidebarCollapseButton"] button, [data-testid="collapsedControl"] button, button[kind="headerNoPadding"] {
-    color: #f1f5f9 !important; background: #2563eb !important;
-    border: 2px solid #60a5fa !important; border-radius: 8px !important;
-    padding: 6px 10px !important; box-shadow: 0 2px 12px rgba(37,99,235,0.6) !important; opacity: 1 !important;
+/* sidebar toggle — highly visible */
+[data-testid="stSidebarCollapseButton"], [data-testid="collapsedControl"] { 
+    position: fixed !important; 
+    top: 0.5rem !important;
+    left: 0.5rem !important;
+    z-index: 999999 !important;
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
 }
-[data-testid="stSidebarCollapseButton"] svg, [data-testid="collapsedControl"] svg { fill: #ffffff !important; stroke: #ffffff !important; width: 20px !important; height: 20px !important; }
+[data-testid="stSidebarCollapseButton"] button, [data-testid="collapsedControl"] button, button[kind="headerNoPadding"] {
+    color: #ffffff !important; 
+    background: #2563eb !important;
+    border: 3px solid #60a5fa !important; 
+    border-radius: 10px !important;
+    padding: 10px 14px !important; 
+    box-shadow: 0 4px 20px rgba(37,99,235,0.8) !important; 
+    opacity: 1 !important;
+    display: block !important;
+    visibility: visible !important;
+    cursor: pointer !important;
+    min-width: 44px !important;
+    min-height: 44px !important;
+}
+[data-testid="stSidebarCollapseButton"] button:hover, [data-testid="collapsedControl"] button:hover {
+    background: #1d4ed8 !important;
+    box-shadow: 0 6px 30px rgba(37,99,235,1) !important;
+    transform: scale(1.1) !important;
+}
+[data-testid="stSidebarCollapseButton"] svg, [data-testid="collapsedControl"] svg { 
+    fill: #ffffff !important; 
+    stroke: #ffffff !important; 
+    width: 24px !important; 
+    height: 24px !important; 
+}
 </style>
 """
 
