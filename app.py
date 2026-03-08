@@ -93,6 +93,46 @@ input, textarea,
 }
 input::placeholder, textarea::placeholder { color: #64748b !important; }
 
+/* ── widget container backgrounds — prevent light-base white bleed-through ── */
+/* Radio group containers and every direct child label */
+[data-baseweb="radio-group"] { background: transparent !important; }
+[data-baseweb="radio-group"] > label { background: transparent !important; color: #cbd5e1 !important; }
+/* The clickable radio circle */
+[data-baseweb="radio"] span:first-child {
+    background: rgba(255,255,255,0.06) !important;
+    border-color: rgba(255,255,255,0.30) !important;
+}
+[data-baseweb="radio"] [aria-checked="true"] span:first-child,
+[data-baseweb="radio"][aria-checked="true"] span:first-child {
+    background: #3b82f6 !important;
+    border-color: #3b82f6 !important;
+}
+/* Sidebar radio — all states */
+[data-testid="stSidebar"] [data-baseweb="radio-group"],
+[data-testid="stSidebar"] [data-baseweb="radio-group"] > label,
+[data-testid="stSidebar"] [data-baseweb="radio"] { background: transparent !important; }
+/* StRadio / selectbox / checkbox outer containers */
+.stRadio > div, .stSelectbox > div, .stCheckbox > label,
+[data-testid="stWidgetLabel"] { background: transparent !important; }
+/* Widget label text */
+[data-testid="stWidgetLabel"] p,
+[data-testid="stWidgetLabel"] span { color: #94a3b8 !important; }
+/* Number-input stepper buttons — keep SVG arrows visible */
+[data-testid="stNumberInput"] button {
+    background: rgba(255,255,255,0.08) !important;
+    border-color: rgba(255,255,255,0.15) !important;
+    color: #e2e8f0 !important;
+}
+[data-testid="stNumberInput"] button svg { fill: #e2e8f0 !important; stroke: #e2e8f0 !important; }
+/* File-uploader inner text */
+[data-testid="stFileUploaderDropzone"] p,
+[data-testid="stFileUploaderDropzone"] span,
+[data-testid="stFileUploaderDropzone"] small { color: #94a3b8 !important; }
+/* Ensure every Streamlit main-area widget wrapper is transparent */
+.stButton, .stDownloadButton, .stRadio, .stCheckbox, .stSelectbox,
+.stTextInput, .stNumberInput, .stFileUploader, .stDataFrame,
+.stMetric, .stAlert, .stExpander { background: transparent !important; }
+
 /* select / dropdown */
 [data-baseweb="select"] > div {
     background: rgba(255,255,255,0.08) !important;
@@ -153,7 +193,7 @@ div[role="radiogroup"]:has(label:nth-child(8)) {
 div[role="radiogroup"]:has(label:nth-child(8)) > label {
     padding: 6px 11px !important; border-radius: 8px 8px 0 0 !important;
     font-weight: 600 !important; font-size: 0.78rem !important;
-    color: #64748b !important; cursor: pointer !important; margin-bottom: -2px !important;
+    color: #94a3b8 !important; cursor: pointer !important; margin-bottom: -2px !important;
     white-space: nowrap !important; flex-shrink: 0 !important;
     display: inline-flex !important; align-items: center !important; gap: 4px !important;
 }
@@ -1055,6 +1095,8 @@ def run_optimization():
     cap  = int(fl["capacity"].max()) if "capacity" in fl.columns else 100
     if n_v > 1:
         dr, dist = optimize_multi_vehicle_vrp(dm, n_v, demands, cap)
+        if not dr:  # capacity constraints infeasible — retry without capacity
+            dr, dist = optimize_multi_vehicle_vrp(dm, n_v)
         st.session_state.driver_routes  = dr
         st.session_state.route          = dr.get(0, [])
         st.session_state.route_distance = dist
@@ -1710,13 +1752,17 @@ def render_admin():
                     st.session_state.route_distance = _td
                 else:
                     _dr, _td = optimize_multi_vehicle_vrp(_dm, _n_v, _demands, _cap)
+                    if not _dr:  # capacity constraints infeasible — retry without capacity
+                        _dr, _td = optimize_multi_vehicle_vrp(_dm, _n_v)
                     st.session_state.driver_routes  = _dr
                     st.session_state.route          = _dr.get(0, [])
                     st.session_state.route_distance = _td
                 st.session_state.n_vehicles     = _n_v
                 st.session_state.vehicle_index  = 1
+                st.session_state.auto_announced  = set()
                 st.session_state.status_message = f"Uploaded data applied — {_n_v} driver route(s) optimised."
                 _save_routes_to_cache()
+                st.session_state["admin_tab"] = "📍 Operations"
                 st.rerun()
 
         st.divider()
