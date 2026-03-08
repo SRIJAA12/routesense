@@ -25,230 +25,39 @@ st.set_page_config(
 
 DARK_CSS = """
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
-
-/* ═══ CLEAN HIGH-CONTRAST DARK THEME ═══ */
-/* Everything visible, bright text, clear backgrounds */
+/* SIMPLE VISIBLE DARK THEME */
 
 html, body, .stApp { 
-    font-family: 'Inter', sans-serif !important; 
     background: #1a1a2e !important;
     color: #ffffff !important;
 }
 
-/* Main content area — visible background */
-section[data-testid="stMain"] {
-    background: #1a1a2e !important;
-}
-
-/* ALL TEXT — bright white */
-h1, h2, h3, h4, h5, h6, p, span, label, div, li, td, th {
+/* ALL TEXT WHITE */
+*, h1, h2, h3, h4, h5, h6, p, span, label, div {
     color: #ffffff !important;
 }
 
-/* Headings — bright blue */
-h1, h2, h3 { color: #60a5fa !important; }
-
-/* ═══ SIDEBAR — VISIBLE WITH BRIGHT TEXT ═══ */
+/* SIDEBAR - DARK BLUE BACKGROUND */
 [data-testid="stSidebar"] { 
-    background: #16213e !important;
-    border-right: 3px solid #3b82f6 !important;
-}
-
-[data-testid="stSidebar"] *,
-[data-testid="stSidebarContent"] * {
-    color: #ffffff !important;
-}
-
-[data-testid="stSidebar"] h1, [data-testid="stSidebar"] h2, [data-testid="stSidebar"] h3,
-[data-testid="stSidebar"] h4 {
-    color: #60a5fa !important;
-    font-weight: 700 !important;
-}
-
-/* Sidebar radio buttons — HIGH CONTRAST */
-[data-testid="stSidebar"] [data-testid="stRadio"] label {
     background: #0f3460 !important;
-    color: #ffffff !important;
-    padding: 12px 20px !important;
-    border-radius: 8px !important;
-    margin: 6px 0 !important;
-    border: 2px solid #1a1a2e !important;
 }
 
-[data-testid="stSidebar"] [data-testid="stRadio"] label:has(input:checked) {
-    background: #3b82f6 !important;
-    color: #ffffff !important;
-    border: 2px solid #60a5fa !important;
-    font-weight: 700 !important;
-}
-
-/* Sidebar buttons — BRIGHT */
-[data-testid="stSidebar"] .stButton button {
-    background: #3b82f6 !important;
-    color: #ffffff !important;
-    border: none !important;
-    padding: 12px 20px !important;
-    font-weight: 700 !important;
-    font-size: 1rem !important;
-    border-radius: 8px !important;
-}
-
-[data-testid="stSidebar"] .stButton button:hover {
-    background: #60a5fa !important;
-}
-
-/* ═══ METRIC CARDS — HIGH CONTRAST ═══ */
-[data-testid="stMetric"] {
-    background: #0f3460 !important;
-    border: 2px solid #3b82f6 !important;
-    border-radius: 12px !important;
-    padding: 20px !important;
-}
-
-[data-testid="stMetricValue"] { 
-    font-size: 2rem !important; 
-    font-weight: 800 !important; 
-    color: #60a5fa !important; 
-}
-
-[data-testid="stMetricLabel"] { 
-    color: #ffffff !important; 
-    font-size: 0.9rem !important; 
-    font-weight: 600 !important;
-}
-
-/* ═══ BUTTONS — BRIGHT AND VISIBLE ═══ */
+/* BUTTONS - BRIGHT BLUE */
 .stButton > button {
     background: #3b82f6 !important;
     color: #ffffff !important;
-    border: none !important;
-    border-radius: 10px !important;
-    font-weight: 700 !important;
-    font-size: 1rem !important;
-    padding: 12px 24px !important;
-    box-shadow: 0 4px 12px rgba(59,130,246,0.5) !important;
+    font-weight: bold !important;
+    padding: 10px 20px !important;
 }
 
-.stButton > button:hover {
-    background: #60a5fa !important;
-    transform: translateY(-2px) !important;
-    box-shadow: 0 6px 20px rgba(59,130,246,0.7) !important;
-}
-
-/* ═══ INPUTS — VISIBLE BACKGROUNDS ═══ */
-input, textarea, select {
+/* METRIC CARDS */
+[data-testid="stMetric"] {
     background: #0f3460 !important;
-    color: #ffffff !important;
-    border: 2px solid #3b82f6 !important;
-    border-radius: 8px !important;
-    padding: 10px !important;
+    padding: 15px !important;
 }
 
-/* ═══ DATAFRAMES — HIGH CONTRAST ═══ */
-[data-testid="stDataFrame"] {
-    background: #0f3460 !important;
-    border: 1px solid #3b82f6 !important;
-}
-
-[data-testid="stDataFrame"] * {
-    color: #ffffff !important;
-}
-
-/* ═══ ADMIN TAB BAR — BRIGHT ═══ */
-div[role="radiogroup"]:has(label:nth-child(8)) {
-    border-bottom: 2px solid #3b82f6 !important;
-    background: #0f3460 !important;
-    padding: 8px !important;
-    border-radius: 8px 8px 0 0 !important;
-}
-
-div[role="radiogroup"]:has(label:nth-child(8)) > label {
-    padding: 10px 16px !important;
-    color: #ffffff !important;
-    font-weight: 600 !important;
-    background: transparent !important;
-    border-radius: 6px !important;
-}
-
-div[role="radiogroup"]:has(label:nth-child(8)) > label:has(input:checked) {
-    background: #3b82f6 !important;
-    color: #ffffff !important;
-}
-
-div[role="radiogroup"]:has(label:nth-child(8)) label > div:first-child { 
-    display: none !important; 
-}
-
-/* ═══ SIDEBAR TOGGLE BUTTON — GLOWING AND HUGE ═══ */
-/* Target all possible button selectors */
-button[kind="header"],
-button[kind="headerNoPadding"],
-[data-testid="stSidebarCollapsedControl"] button,
-[data-testid="collapsedControl"] button,
-[data-testid="stSidebarCollapseButton"] button,
-[data-testid="baseButton-header"] {
-    background: #3b82f6 !important;
-    color: #ffffff !important;
-    border: 5px solid #60a5fa !important;
-    border-radius: 20px !important;
-    padding: 20px !important;
-    box-shadow: 0 0 40px #60a5fa, 0 0 80px rgba(59,130,246,0.8) !important;
-    min-width: 70px !important;
-    min-height: 70px !important;
-    width: 70px !important;
-    height: 70px !important;
-    display: flex !important;
-    align-items: center !important;
-    justify-content: center !important;
-    cursor: pointer !important;
-    z-index: 99999999 !important;
-    position: relative !important;
-    opacity: 1 !important;
-    visibility: visible !important;
-}
-
-button[kind="header"]:hover,
-button[kind="headerNoPadding"]:hover,
-[data-testid="collapsedControl"] button:hover,
-[data-testid="stSidebarCollapseButton"] button:hover {
-    background: #60a5fa !important;
-    box-shadow: 0 0 60px #60a5fa, 0 0 120px rgba(96,165,250,1) !important;
-    transform: scale(1.2) !important;
-}
-
-button[kind="header"] svg,
-button[kind="headerNoPadding"] svg,
-[data-testid="collapsedControl"] svg,
-[data-testid="stSidebarCollapseButton"] svg {
-    fill: #ffffff !important;
-    stroke: #ffffff !important;
-    width: 36px !important;
-    height: 36px !important;
-    color: #ffffff !important;
-}
-
-/* ═══ ALERTS & INFO — VISIBLE ═══ */
-[data-testid="stAlert"] {
-    background: #0f3460 !important;
-    border: 2px solid #3b82f6 !important;
-    color: #ffffff !important;
-}
-
-/* ═══ DIVIDERS ═══ */
-hr {
-    border-color: #3b82f6 !important;
-    border-width: 2px !important;
-}
-
-/* ═══ SUPPRESS STREAMLIT DIMMING ═══ */
-[data-stale="true"], [data-stale="true"] > * { 
-    opacity: 1 !important; 
-    filter: none !important; 
-}
-[data-testid="stStatusWidget"] { display: none !important; }
-#stDecoration { display: none !important; }
-[data-testid="stToolbar"] { display: none !important; }
+/* SUPPRESS DIMMING */
+[data-stale="true"] { opacity: 1 !important; }
 </style>
 """
 
@@ -1003,6 +812,8 @@ apply_theme()
 # ═══════════════════════════════════════════════════════════════════════════════
 
 with st.sidebar:
+    # TEST - If you see this, sidebar is working!
+    
     st.markdown("## 🚚 RouteSense")
     st.caption("Logistics Intelligence Platform")
     st.divider()
