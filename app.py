@@ -27,170 +27,208 @@ DARK_CSS = """
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
 
-/* base="dark" in config.toml — Streamlit renders all widgets dark natively.
-   This CSS only adds gradient background, card gloss, and button styling. */
+/* ═══ CLEAN HIGH-CONTRAST DARK THEME ═══ */
+/* Everything visible, bright text, clear backgrounds */
 
-html, body, .stApp { font-family: 'Inter', sans-serif !important; }
-.stApp { background: radial-gradient(ellipse at top, #0d1b2a 0%, #050b14 60%, #020608 100%) !important; }
-
-/* glassmorphism metric cards */
-[data-testid="stMetric"] {
-    background: rgba(255,255,255,0.04) !important;
-    border: 1px solid rgba(255,255,255,0.10) !important;
-    border-radius: 14px !important; padding: 16px 20px !important;
-    backdrop-filter: blur(12px);
-    box-shadow: 0 4px 20px rgba(0,0,0,0.4) !important;
-    transition: transform 0.2s;
+html, body, .stApp { 
+    font-family: 'Inter', sans-serif !important; 
+    background: #1a1a2e !important;
+    color: #ffffff !important;
 }
-[data-testid="stMetric"]:hover { transform: translateY(-2px); }
-[data-testid="stMetricValue"] { font-size: 1.5rem !important; font-weight: 700 !important; color: #93c5fd !important; }
-[data-testid="stMetricLabel"] { color: #94a3b8 !important; font-size: 0.75rem !important; text-transform: uppercase; letter-spacing: 0.08em; }
 
-/* sidebar gradient — force always visible */
+/* Main content area — visible background */
+section[data-testid="stMain"] {
+    background: #1a1a2e !important;
+}
+
+/* ALL TEXT — bright white */
+h1, h2, h3, h4, h5, h6, p, span, label, div, li, td, th {
+    color: #ffffff !important;
+}
+
+/* Headings — bright blue */
+h1, h2, h3 { color: #60a5fa !important; }
+
+/* ═══ SIDEBAR — FULLY VISIBLE ═══ */
 [data-testid="stSidebar"] { 
-    background: linear-gradient(180deg,#0b1623 0%,#060f1c 100%) !important; 
-    border-right: 1px solid rgba(255,255,255,0.07) !important;
-    min-width: 280px !important;
-    width: 280px !important;
-    display: block !important;
-    visibility: visible !important;
-    opacity: 1 !important;
-}
-[data-testid="stSidebar"][aria-expanded="false"] {
+    background: #16213e !important;
+    border-right: 2px solid #3b82f6 !important;
+    min-width: 300px !important;
     display: block !important;
     visibility: visible !important;
 }
-[data-testid="stSidebarContent"] {
-    display: block !important;
-    visibility: visible !important;
+
+[data-testid="stSidebar"] * {
+    color: #ffffff !important;
 }
-/* all sidebar text bright and visible */
-[data-testid="stSidebar"] *, [data-testid="stSidebar"] h1, [data-testid="stSidebar"] h2, 
-[data-testid="stSidebar"] h3, [data-testid="stSidebar"] h4, [data-testid="stSidebar"] p,
-[data-testid="stSidebar"] span, [data-testid="stSidebar"] label, [data-testid="stSidebar"] div {
-    color: #e2e8f0 !important;
+
+[data-testid="stSidebar"] h1, [data-testid="stSidebar"] h2, [data-testid="stSidebar"] h3 {
+    color: #60a5fa !important;
 }
-[data-testid="stSidebar"] .stMarkdown h2, [data-testid="stSidebar"] .stMarkdown h3, [data-testid="stSidebar"] .stMarkdown h4 {
-    color: #93c5fd !important;
-}
-[data-testid="stSidebar"] .stCaption, [data-testid="stSidebar"] [data-testid="stCaptionContainer"] {
-    color: #94a3b8 !important;
-}
-/* sidebar radio buttons — ensure visible */
+
+/* Sidebar radio buttons — HIGH CONTRAST */
 [data-testid="stSidebar"] [data-testid="stRadio"] label {
-    color: #e2e8f0 !important;
-    background: rgba(255,255,255,0.05) !important;
-    padding: 8px 16px !important;
+    background: #0f3460 !important;
+    color: #ffffff !important;
+    padding: 12px 20px !important;
     border-radius: 8px !important;
-    margin: 4px 0 !important;
-    cursor: pointer !important;
+    margin: 6px 0 !important;
+    border: 2px solid #1a1a2e !important;
 }
+
 [data-testid="stSidebar"] [data-testid="stRadio"] label:has(input:checked) {
-    background: rgba(37,99,235,0.3) !important;
-    color: #93c5fd !important;
-    border: 1px solid #3b82f6 !important;
+    background: #3b82f6 !important;
+    color: #ffffff !important;
+    border: 2px solid #60a5fa !important;
+    font-weight: 700 !important;
 }
-/* sidebar buttons — bright and clickable */
+
+/* Sidebar buttons — BRIGHT */
 [data-testid="stSidebar"] .stButton button {
-    background: linear-gradient(135deg,#2563eb,#1d4ed8) !important;
+    background: #3b82f6 !important;
     color: #ffffff !important;
     border: none !important;
-    padding: 10px 20px !important;
+    padding: 12px 20px !important;
+    font-weight: 700 !important;
+    font-size: 1rem !important;
+    border-radius: 8px !important;
+}
+
+[data-testid="stSidebar"] .stButton button:hover {
+    background: #60a5fa !important;
+}
+
+/* ═══ METRIC CARDS — HIGH CONTRAST ═══ */
+[data-testid="stMetric"] {
+    background: #0f3460 !important;
+    border: 2px solid #3b82f6 !important;
+    border-radius: 12px !important;
+    padding: 20px !important;
+}
+
+[data-testid="stMetricValue"] { 
+    font-size: 2rem !important; 
+    font-weight: 800 !important; 
+    color: #60a5fa !important; 
+}
+
+[data-testid="stMetricLabel"] { 
+    color: #ffffff !important; 
+    font-size: 0.9rem !important; 
     font-weight: 600 !important;
-    width: 100% !important;
-    margin: 4px 0 !important;
-}
-[data-testid="stSidebar"] hr {
-    border-color: rgba(255,255,255,0.15) !important;
-    margin: 16px 0 !important;
 }
 
-/* buttons */
+/* ═══ BUTTONS — BRIGHT AND VISIBLE ═══ */
 .stButton > button {
-    background: linear-gradient(135deg,#2563eb,#1d4ed8) !important;
-    color: #fff !important; border: none !important; border-radius: 10px !important;
-    font-weight: 600 !important; font-size: 0.85rem !important;
-    width: 100% !important; padding: 0.55rem 1rem !important;
-    box-shadow: 0 2px 12px rgba(37,99,235,0.35) !important; transition: all 0.2s;
+    background: #3b82f6 !important;
+    color: #ffffff !important;
+    border: none !important;
+    border-radius: 10px !important;
+    font-weight: 700 !important;
+    font-size: 1rem !important;
+    padding: 12px 24px !important;
+    box-shadow: 0 4px 12px rgba(59,130,246,0.5) !important;
 }
-.stButton > button:hover { background: linear-gradient(135deg,#1d4ed8,#1e40af) !important; transform: translateY(-1px); box-shadow: 0 4px 18px rgba(37,99,235,0.5) !important; }
 
-/* download button */
-[data-testid="stDownloadButton"] button { background: rgba(37,99,235,0.25) !important; color: #93c5fd !important; border: 1px solid rgba(96,165,250,0.3) !important; }
-[data-testid="stDownloadButton"] button * { color: #93c5fd !important; }
+.stButton > button:hover {
+    background: #60a5fa !important;
+    transform: translateY(-2px) !important;
+    box-shadow: 0 6px 20px rgba(59,130,246,0.7) !important;
+}
 
-/* progress bar */
-[data-testid="stProgressBar"] > div > div { background: linear-gradient(90deg,#3b82f6,#06b6d4) !important; }
+/* ═══ INPUTS — VISIBLE BACKGROUNDS ═══ */
+input, textarea, select {
+    background: #0f3460 !important;
+    color: #ffffff !important;
+    border: 2px solid #3b82f6 !important;
+    border-radius: 8px !important;
+    padding: 10px !important;
+}
 
-/* divider */
-hr { border-color: rgba(255,255,255,0.07) !important; }
+/* ═══ DATAFRAMES — HIGH CONTRAST ═══ */
+[data-testid="stDataFrame"] {
+    background: #0f3460 !important;
+    border: 1px solid #3b82f6 !important;
+}
 
-/* ── admin nav radio styled as tab bar ── */
+[data-testid="stDataFrame"] * {
+    color: #ffffff !important;
+}
+
+/* ═══ ADMIN TAB BAR — BRIGHT ═══ */
 div[role="radiogroup"]:has(label:nth-child(8)) {
-    gap: 0 !important; flex-wrap: nowrap !important; overflow-x: auto !important;
-    border-bottom: 1px solid rgba(255,255,255,0.12) !important; padding: 0 !important;
-}
-div[role="radiogroup"]:has(label:nth-child(8)) > label {
-    padding: 6px 11px !important; border-radius: 8px 8px 0 0 !important;
-    font-weight: 600 !important; font-size: 0.78rem !important;
-    color: #94a3b8 !important; cursor: pointer !important; margin-bottom: -2px !important;
-    white-space: nowrap !important; flex-shrink: 0 !important;
-    display: inline-flex !important; align-items: center !important; gap: 4px !important;
-    background: transparent !important;
-}
-div[role="radiogroup"]:has(label:nth-child(8)) > label:has(input:checked) {
-    color: #60a5fa !important; background: rgba(96,165,250,0.10) !important;
     border-bottom: 2px solid #3b82f6 !important;
-}
-div[role="radiogroup"]:has(label:nth-child(8)) label > div:first-child { display: none !important; }
-div[role="radiogroup"]:has(label:nth-child(8)) label p {
-    color: inherit !important; white-space: nowrap !important; margin: 0 !important;
+    background: #0f3460 !important;
+    padding: 8px !important;
+    border-radius: 8px 8px 0 0 !important;
 }
 
-/* header */
-[data-testid="stHeader"] { background: #050b14 !important; border-bottom: 1px solid rgba(255,255,255,0.07) !important; }
+div[role="radiogroup"]:has(label:nth-child(8)) > label {
+    padding: 10px 16px !important;
+    color: #ffffff !important;
+    font-weight: 600 !important;
+    background: transparent !important;
+    border-radius: 6px !important;
+}
 
-/* suppress Streamlit stale-dim */
-[data-stale="true"], [data-stale="true"] > * { opacity: 1 !important; transition: none !important; filter: none !important; }
+div[role="radiogroup"]:has(label:nth-child(8)) > label:has(input:checked) {
+    background: #3b82f6 !important;
+    color: #ffffff !important;
+}
+
+div[role="radiogroup"]:has(label:nth-child(8)) label > div:first-child { 
+    display: none !important; 
+}
+
+/* ═══ SIDEBAR TOGGLE — SUPER VISIBLE ═══ */
+[data-testid="stSidebarCollapseButton"], [data-testid="collapsedControl"] {
+    position: fixed !important;
+    top: 1rem !important;
+    left: 1rem !important;
+    z-index: 999999 !important;
+}
+
+[data-testid="stSidebarCollapseButton"] button, 
+[data-testid="collapsedControl"] button, 
+button[kind="headerNoPadding"] {
+    background: #3b82f6 !important;
+    color: #ffffff !important;
+    border: 3px solid #60a5fa !important;
+    border-radius: 12px !important;
+    padding: 12px !important;
+    box-shadow: 0 4px 20px rgba(59,130,246,0.8) !important;
+    min-width: 48px !important;
+    min-height: 48px !important;
+}
+
+[data-testid="stSidebarCollapseButton"] svg, 
+[data-testid="collapsedControl"] svg {
+    fill: #ffffff !important;
+    width: 24px !important;
+    height: 24px !important;
+}
+
+/* ═══ ALERTS & INFO — VISIBLE ═══ */
+[data-testid="stAlert"] {
+    background: #0f3460 !important;
+    border: 2px solid #3b82f6 !important;
+    color: #ffffff !important;
+}
+
+/* ═══ DIVIDERS ═══ */
+hr {
+    border-color: #3b82f6 !important;
+    border-width: 2px !important;
+}
+
+/* ═══ SUPPRESS STREAMLIT DIMMING ═══ */
+[data-stale="true"], [data-stale="true"] > * { 
+    opacity: 1 !important; 
+    filter: none !important; 
+}
 [data-testid="stStatusWidget"] { display: none !important; }
 #stDecoration { display: none !important; }
 [data-testid="stToolbar"] { display: none !important; }
-
-/* sidebar toggle — highly visible */
-[data-testid="stSidebarCollapseButton"], [data-testid="collapsedControl"] { 
-    position: fixed !important; 
-    top: 0.5rem !important;
-    left: 0.5rem !important;
-    z-index: 999999 !important;
-    display: block !important;
-    visibility: visible !important;
-    opacity: 1 !important;
-}
-[data-testid="stSidebarCollapseButton"] button, [data-testid="collapsedControl"] button, button[kind="headerNoPadding"] {
-    color: #ffffff !important; 
-    background: #2563eb !important;
-    border: 3px solid #60a5fa !important; 
-    border-radius: 10px !important;
-    padding: 10px 14px !important; 
-    box-shadow: 0 4px 20px rgba(37,99,235,0.8) !important; 
-    opacity: 1 !important;
-    display: block !important;
-    visibility: visible !important;
-    cursor: pointer !important;
-    min-width: 44px !important;
-    min-height: 44px !important;
-}
-[data-testid="stSidebarCollapseButton"] button:hover, [data-testid="collapsedControl"] button:hover {
-    background: #1d4ed8 !important;
-    box-shadow: 0 6px 30px rgba(37,99,235,1) !important;
-    transform: scale(1.1) !important;
-}
-[data-testid="stSidebarCollapseButton"] svg, [data-testid="collapsedControl"] svg { 
-    fill: #ffffff !important; 
-    stroke: #ffffff !important; 
-    width: 24px !important; 
-    height: 24px !important; 
-}
 </style>
 """
 
@@ -971,17 +1009,23 @@ with st.sidebar:
         st.divider()
         st.divider()
         # Active alerts count badge
-        alerts = generate_alerts(
-            st.session_state.deliveries, st.session_state.route,
-            predict_delay_risk(st.session_state.route_distance,
-                len([n for n in (st.session_state.route or []) if n!=0]))[0],
-            st.session_state.route_distance,
-        )
-        n_warn = sum(1 for a in alerts if a[1] in ["HIGH","WARN"])
-        if n_warn:
-            st.markdown(f"**🔔 {n_warn} Active Alert{'s' if n_warn>1 else ''}**")
-        else:
-            st.markdown("**🟢 All Systems OK**")
+        try:
+            if not st.session_state.deliveries.empty and st.session_state.route:
+                alerts = generate_alerts(
+                    st.session_state.deliveries, st.session_state.route,
+                    predict_delay_risk(st.session_state.route_distance,
+                        len([n for n in (st.session_state.route or []) if n!=0]))[0],
+                    st.session_state.route_distance,
+                )
+                n_warn = sum(1 for a in alerts if a[1] in ["HIGH","WARN"])
+                if n_warn:
+                    st.markdown(f"**🔔 {n_warn} Active Alert{'s' if n_warn>1 else ''}**")
+                else:
+                    st.markdown("**🟢 All Systems OK**")
+            else:
+                st.info("📋 Upload data to begin")
+        except Exception:
+            st.info("📋 Upload data to begin")
     else:
         st.markdown("#### Driver Info")
         if st.session_state.route:
@@ -1554,9 +1598,8 @@ def render_admin():
                 st.session_state.n_vehicles     = _n_v
                 st.session_state.vehicle_index  = 1
                 st.session_state.auto_announced  = set()
-                st.session_state.status_message = f"Uploaded data applied — {_n_v} driver route(s) optimised."
+                st.session_state.status_message = f"Uploaded data applied — {_n_v} driver route(s) optimised. Check Operations tab for results."
                 _save_routes_to_cache()
-                st.session_state["admin_tab"] = "📍 Operations"
                 st.rerun()
 
         st.divider()
