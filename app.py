@@ -111,113 +111,6 @@ div[role="radiogroup"]:has(label:nth-child(8)) label p {
 </style>
 """
 
-LIGHT_CSS = """
-<style>
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
-
-/* base="dark" in config.toml — LIGHT_CSS must explicitly force light for every element */
-html, body, .stApp { font-family: 'Inter', sans-serif !important; color: #0f172a !important; }
-.stApp { background: linear-gradient(160deg,#f0f7ff 0%,#e8f0fe 50%,#f5f3ff 100%) !important; }
-
-/* main content area */
-section[data-testid="stMain"],
-div[data-testid="stMainBlockContainer"],
-.main .block-container { background: transparent !important; color: #0f172a !important; }
-
-/* all text */
-p, span, label, li, td, th, caption, .stMarkdown, div { color: #1e293b !important; }
-h1,h2,h3,h4,h5,h6 { color: #1e3a8a !important; }
-
-/* sidebar — force white */
-[data-testid="stSidebar"], [data-testid="stSidebar"] > div { background: #ffffff !important; border-right: 1px solid #bfdbfe !important; }
-[data-testid="stSidebar"] * { color: #1e293b !important; }
-[data-testid="stSidebar"] h1,[data-testid="stSidebar"] h2,[data-testid="stSidebar"] h3 { color: #1e3a8a !important; }
-
-/* native widget backgrounds — override dark-base defaults */
-input, textarea { background: #ffffff !important; color: #0f172a !important; border: 1px solid #cbd5e1 !important; border-radius: 8px !important; }
-[data-baseweb="input"] > div, [data-baseweb="textarea"] > div { background: #ffffff !important; color: #0f172a !important; border: 1px solid #cbd5e1 !important; }
-[data-baseweb="select"] > div { background: #ffffff !important; color: #0f172a !important; border: 1px solid #cbd5e1 !important; border-radius: 8px !important; }
-[data-baseweb="popover"], [data-baseweb="menu"] { background: #ffffff !important; }
-[data-baseweb="menu"] li, [data-baseweb="menu"] li * { color: #0f172a !important; background: transparent !important; }
-[data-baseweb="radio-group"] > label, [data-testid="stRadio"] label p, [data-testid="stCheckbox"] label p { color: #1e293b !important; }
-
-/* metric cards */
-[data-testid="stMetric"] { background: #ffffff !important; border: 1px solid #dbeafe !important; border-radius: 14px !important; padding: 16px 20px !important; box-shadow: 0 2px 10px rgba(59,130,246,0.08) !important; transition: transform 0.2s; }
-[data-testid="stMetric"]:hover { transform: translateY(-2px); }
-[data-testid="stMetricValue"] { font-size: 1.5rem !important; font-weight: 700 !important; color: #1d4ed8 !important; }
-[data-testid="stMetricLabel"] { color: #64748b !important; font-size: 0.75rem !important; text-transform: uppercase; letter-spacing: 0.08em; }
-
-/* buttons */
-.stButton > button { background: linear-gradient(135deg,#1d4ed8,#2563eb) !important; color: #ffffff !important; border: none !important; border-radius: 10px !important; font-weight: 600 !important; width: 100% !important; padding: 0.55rem 1rem !important; box-shadow: 0 2px 10px rgba(29,78,216,0.25) !important; transition: all 0.2s; }
-.stButton > button * { color: #ffffff !important; background: transparent !important; }
-.stButton > button:hover { background: linear-gradient(135deg,#1e40af,#1d4ed8) !important; transform: translateY(-1px); }
-[data-testid="stDownloadButton"] button { background: #eff6ff !important; color: #1d4ed8 !important; border: 1px solid #bfdbfe !important; border-radius: 10px !important; }
-[data-testid="stDownloadButton"] button * { color: #1d4ed8 !important; }
-
-/* file uploader */
-[data-testid="stFileUploader"] section, [data-testid="stFileUploaderDropzone"] { background: #f8fafc !important; border: 2px dashed #93c5fd !important; border-radius: 12px !important; }
-[data-testid="stFileUploaderDropzone"] p, [data-testid="stFileUploaderDropzone"] span, [data-testid="stFileUploaderDropzone"] small { color: #64748b !important; }
-
-/* expander */
-[data-testid="stExpander"] { background: #ffffff !important; border: 1px solid #e2e8f0 !important; border-radius: 10px !important; }
-[data-testid="stExpander"] summary * { color: #1e293b !important; }
-
-/* dataframe */
-[data-testid="stDataFrame"] { background: #ffffff !important; }
-[data-testid="stDataFrame"] * { color: #1e293b !important; }
-
-/* alerts */
-[data-testid="stAlert"] { border-radius: 10px !important; }
-
-/* progress */
-[data-testid="stProgressBar"] > div { background: #dbeafe !important; border-radius: 99px; }
-[data-testid="stProgressBar"] > div > div { background: linear-gradient(90deg,#3b82f6,#0ea5e9) !important; }
-
-/* divider */
-hr { border-color: #e2e8f0 !important; }
-
-/* ── admin nav radio as tab bar ── */
-div[role="radiogroup"]:has(label:nth-child(8)) {
-    gap: 0 !important; flex-wrap: nowrap !important; overflow-x: auto !important;
-    border-bottom: 1px solid #bfdbfe !important; padding: 0 !important;
-}
-div[role="radiogroup"]:has(label:nth-child(8)) > label {
-    padding: 6px 11px !important; border-radius: 8px 8px 0 0 !important;
-    font-weight: 600 !important; font-size: 0.78rem !important; color: #64748b !important;
-    cursor: pointer !important; margin-bottom: -2px !important;
-    white-space: nowrap !important; flex-shrink: 0 !important;
-    display: inline-flex !important; align-items: center !important; gap: 4px !important;
-    background: transparent !important;
-}
-div[role="radiogroup"]:has(label:nth-child(8)) > label:has(input:checked) { color: #1d4ed8 !important; background: #eff6ff !important; border-bottom: 2px solid #1d4ed8 !important; }
-div[role="radiogroup"]:has(label:nth-child(8)) label > div:first-child { display: none !important; }
-div[role="radiogroup"]:has(label:nth-child(8)) label p { white-space: nowrap !important; margin: 0 !important; color: inherit !important; }
-
-/* plotly light text */
-.js-plotly-plot .plotly text, .js-plotly-plot .plotly .gtitle,
-.js-plotly-plot .plotly .xtick text, .js-plotly-plot .plotly .ytick text,
-.js-plotly-plot .plotly .legendtext { fill: #1e293b !important; }
-
-/* suppress stale dim */
-[data-stale="true"], [data-stale="true"] > * { opacity: 1 !important; transition: none !important; filter: none !important; }
-[data-testid="stStatusWidget"] { display: none !important; }
-#stDecoration { display: none !important; }
-[data-testid="stToolbar"] { display: none !important; }
-
-/* header */
-[data-testid="stHeader"] { background: transparent !important; backdrop-filter: none !important; box-shadow: none !important; border-bottom: none !important; }
-
-/* sidebar toggle */
-[data-testid="stSidebarCollapseButton"], [data-testid="collapsedControl"] { position: relative !important; z-index: 9999 !important; }
-[data-testid="stSidebarCollapseButton"] button, [data-testid="collapsedControl"] button, button[kind="headerNoPadding"] {
-    color: #ffffff !important; background: #1d4ed8 !important;
-    border: 2px solid #3b82f6 !important; border-radius: 8px !important;
-    padding: 6px 10px !important; box-shadow: 0 2px 12px rgba(29,78,216,0.45) !important; opacity: 1 !important;
-}
-[data-testid="stSidebarCollapseButton"] svg, [data-testid="collapsedControl"] svg { fill: #ffffff !important; stroke: #ffffff !important; width: 20px !important; height: 20px !important; }
-</style>
-"""
-
 
 def _render_anti_dim_js() -> None:
     """
@@ -252,8 +145,8 @@ def _render_anti_dim_js() -> None:
 </script>""", height=0)
 
 
-def apply_theme(is_dark):
-    st.markdown(DARK_CSS if is_dark else LIGHT_CSS, unsafe_allow_html=True)
+def apply_theme():
+    st.markdown(DARK_CSS, unsafe_allow_html=True)
     _render_anti_dim_js()
 
 
@@ -867,7 +760,6 @@ def speak_js(text: str, lang: str = "en-US", fallback_text: str = "") -> None:
 # ═══════════════════════════════════════════════════════════════════════════════
 
 def initialize_state():
-    if "dark_mode" not in st.session_state: st.session_state.dark_mode=True
     if "role" not in st.session_state: st.session_state.role="Admin"
     if "deliveries" not in st.session_state:
         # Try to restore last known routes from the global cache first
@@ -943,20 +835,11 @@ def run_optimization():
 # BOOT
 # ═══════════════════════════════════════════════════════════════════════════════
 
-# Inject a minimal theme flash-prevention CSS BEFORE initialize_state() runs.
-# Always inject (dark OR light) so Streamlit's reconciler always sees the same
-# number of markdown elements at the same positions — prevents the old dark
-# background from "lingering" on the theme switch and making light mode invisible.
-if st.session_state.get("dark_mode", True):
-    st.markdown(
-        "<style>html,body,.stApp{background:#050b14!important;color:#e2e8f0!important;}</style>",
-        unsafe_allow_html=True,
-    )
-else:
-    st.markdown(
-        "<style>html,body,.stApp{background:#f0f7ff!important;color:#0f172a!important;}</style>",
-        unsafe_allow_html=True,
-    )
+# Flash-prevention: set dark background immediately before any widget renders
+st.markdown(
+    "<style>html,body,.stApp{background:#050b14!important;color:#e2e8f0!important;}</style>",
+    unsafe_allow_html=True,
+)
 
 try:
     initialize_state()
@@ -964,22 +847,14 @@ except Exception as exc:
     st.error(f"Unable to load operational data: {exc}")
     st.stop()
 
-apply_theme(st.session_state.dark_mode)
+apply_theme()
 
 # ═══════════════════════════════════════════════════════════════════════════════
 # SIDEBAR
 # ═══════════════════════════════════════════════════════════════════════════════
 
 with st.sidebar:
-    lc,tc = st.columns([4,1])
-    with lc:
-        st.markdown("## 🚚 RouteSense")
-    with tc:
-        if st.button("☀️" if st.session_state.dark_mode else "🌙",
-                     key="theme_toggle", help="Toggle theme"):
-            st.session_state.dark_mode = not st.session_state.dark_mode
-            st.rerun()
-
+    st.markdown("## 🚚 RouteSense")
     st.caption("Logistics Intelligence Platform")
     st.divider()
 
